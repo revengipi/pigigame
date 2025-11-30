@@ -258,8 +258,9 @@
         }
 
         .menu-logo {
-            width: 200px;
-            height: 200px;
+            width: 260px;
+            height: 260px;
+            margin-top: 40px;
             margin-bottom: 30px;
             filter: drop-shadow(0 0 30px #FF1493) drop-shadow(0 0 50px #FF1493);
             animation: logoFloat 3s ease-in-out infinite;
@@ -276,7 +277,7 @@
             font-weight: bold;
             color: #FF1493;
             text-shadow: 4px 4px 0px #000000, 0 0 30px #FF1493, 0 0 50px #FF1493;
-            margin-bottom: 20px;
+            margin-bottom: 60px;
             animation: pulse 2s infinite, glitch 5s infinite;
             letter-spacing: 5px;
             position: relative;
@@ -531,7 +532,6 @@
             </svg>
 
             <h1 class="menu-title">GANGSTER PIG</h1>
-            <p class="menu-subtitle">Endless Runner Shooter</p>
             <button class="menu-button" id="startButton">START GAME</button>
             <button class="menu-button" id="statsButton">STATISTICS</button>
             <button class="menu-button" id="settingsButton">SETTINGS</button>
@@ -541,10 +541,23 @@
         <div id="settingsMenu">
             <h2 class="settings-title">SETTINGS</h2>
             <div class="setting-item">
-                <div class="setting-label">Sound Volume</div>
+                <div class="setting-label">Sound Effects Volume</div>
                 <div class="volume-control">
-                    <input type="range" min="0" max="100" value="50" class="volume-slider" id="volumeSlider">
-                    <span class="volume-value" id="volumeValue">50%</span>
+                    <input type="range" min="0" max="100" value="10" class="volume-slider" id="volumeSlider">
+                    <span class="volume-value" id="volumeValue">10%</span>
+                </div>
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">Music Volume</div>
+                <div class="volume-control">
+                    <input type="range" min="0" max="100" value="10" class="volume-slider" id="musicVolumeSlider">
+                    <span class="volume-value" id="musicVolumeValue">10%</span>
+                </div>
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">Music</div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="settings-button" id="musicToggle" style="flex: 1; padding: 10px;">ON</button>
                 </div>
             </div>
             <button class="settings-button" id="closeSettings">BACK</button>
@@ -604,16 +617,17 @@
         </div>
 
         <!-- Merchant dialog (positioned near merchant on right side) -->
-        <div id="merchantDialog" style="display: none; position: absolute; top: 30%; right: 8%; transform: translateY(-50%); background: #1a1a1a; padding: 25px; border: 5px solid #FFD700; z-index: 200; color: #FFD700; text-align: left; box-shadow: 0 0 40px rgba(255, 215, 0, 0.6); max-width: 400px;">
-            <!-- Speech bubble triangle pointing to merchant -->
+        <div id="merchantDialog" style="display: none; position: absolute; top: 28%; right: 18%; transform: translateY(-50%); background: #1a1a1a; padding: 25px; border: 5px solid #FFD700; z-index: 200; color: #FFD700; text-align: left; box-shadow: 0 0 40px rgba(255, 215, 0, 0.6); max-width: 420px;">
+            <!-- Speech bubble triangle pointing to merchant (right side) -->
             <div style="position: absolute; right: -20px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-left: 20px solid #FFD700; border-top: 15px solid transparent; border-bottom: 15px solid transparent;"></div>
             <div style="position: absolute; right: -15px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-left: 15px solid #1a1a1a; border-top: 12px solid transparent; border-bottom: 12px solid transparent;"></div>
 
-            <h2 style="margin-bottom: 15px; text-shadow: 2px 2px 0px #000000; font-size: 24px;">👤 Mysterious Merchant</h2>
+            <h2 style="margin-bottom: 15px; text-shadow: 2px 2px 0px #000000; font-size: 24px;">👤 Crouton</h2>
             <p style="font-size: 16px; margin-bottom: 25px; color: #FFF; line-height: 1.5;">Looking for supplies, friend?<br>I have everything you need...</p>
-            <div style="text-align: center;">
-                <button id="acceptShop" style="padding: 12px 30px; font-size: 18px; background: #FFD700; color: #000; border: 3px solid #FFA500; cursor: pointer; font-weight: bold; margin: 5px;">Yes, show me</button>
-                <button id="declineShop" style="padding: 12px 30px; font-size: 18px; background: #8B0000; color: #FFF; border: 3px solid #FF0000; cursor: pointer; font-weight: bold; margin: 5px;">Not now</button>
+            <div style="text-align: center; display: flex; flex-direction: column; gap: 8px;">
+                <button id="acceptShop" style="padding: 12px 30px; font-size: 16px; background: #FFD700; color: #000; border: 3px solid #FFA500; cursor: pointer; font-weight: bold;">Yes, show me</button>
+                <button id="declineShop" style="padding: 12px 30px; font-size: 16px; background: #8B0000; color: #FFF; border: 3px solid #FF0000; cursor: pointer; font-weight: bold;">Not now</button>
+                <button id="askRestock" style="padding: 12px 30px; font-size: 16px; background: #4169E1; color: #FFF; border: 3px solid #6495ED; cursor: pointer; font-weight: bold;">When will the shop be restocked?</button>
             </div>
         </div>
 
@@ -625,7 +639,6 @@
             <div class="shop-tabs">
                 <div class="shop-tab active" data-tab="weapons">🔫 WEAPONS</div>
                 <div class="shop-tab" data-tab="equipment">🛡️ EQUIPMENT</div>
-                <div class="shop-tab" data-tab="boosts">⚡ BOOSTS</div>
             </div>
 
             <!-- Weapons Tab -->
@@ -640,7 +653,7 @@
                 </div>
                 <div class="shop-item" id="buySniper">
                     <div><strong>🎯 Sniper Rifle (precision)</strong></div>
-                    <div id="sniperInfo">5 rounds | Damage: 10 | Price: $300</div>
+                    <div id="sniperInfo">5 rounds | Damage: 5 | Price: $200</div>
                 </div>
                 <div class="shop-item" id="buyTommy">
                     <div><strong>🔥 Tommy Gun (auto)</strong></div>
@@ -654,17 +667,38 @@
                     <div><strong>🛡️ Armor (+1 protection)</strong></div>
                     <div>Price: $100</div>
                 </div>
-            </div>
-
-            <!-- Boosts Tab -->
-            <div class="shop-content" id="boosts-content">
                 <div class="shop-item" id="buyHealth">
                     <div><strong>❤️ Health (+1 HP)</strong></div>
-                    <div id="healthPrice">Price: $50</div>
+                    <div id="healthPrice">Price: $100</div>
                 </div>
             </div>
 
             <button id="closeShop">Continue (next level)</button>
+        </div>
+
+        <!-- SuperUSD Investment Modal -->
+        <div id="superUsdModal" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #000000; padding: 40px; border: 5px solid #9CE500; z-index: 400; box-shadow: 0 0 40px rgba(156, 229, 0, 0.6), inset 0 0 30px rgba(156, 229, 0, 0.2); min-width: 400px;">
+            <h2 style="text-align: center; color: #9CE500; text-shadow: 3px 3px 0px #000000, 0 0 20px #9CE500; margin-bottom: 20px;">💰 SuperUSD Investment 💰</h2>
+            <p style="color: #FFB6C1; text-align: center; margin-bottom: 20px; font-size: 18px;">Invest your money and get <strong style="color: #9CE500;">1.5x returns</strong> in the next shop!</p>
+
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="color: #FF1493; font-size: 20px; margin-bottom: 10px;">Available: $<span id="investAvailable">0</span></div>
+            </div>
+
+            <!-- Collect Profit Button -->
+            <button id="collectPayout" style="padding: 15px; margin-bottom: 20px; font-size: 18px; background: linear-gradient(135deg, #9CE500 0%, #7BC400 100%); border: 3px solid #9CE500; color: #000; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;">💰 Collect Profit 💰</button>
+
+
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+                <button class="invest-btn" data-amount="10" style="padding: 15px; font-size: 18px; background: linear-gradient(135deg, #9CE500 0%, #7BC400 100%); border: 3px solid #9CE500; color: #000; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;">Invest $10</button>
+                <button class="invest-btn" data-amount="50" style="padding: 15px; font-size: 18px; background: linear-gradient(135deg, #9CE500 0%, #7BC400 100%); border: 3px solid #9CE500; color: #000; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;">Invest $50</button>
+                <button class="invest-btn" data-amount="100" style="padding: 15px; font-size: 18px; background: linear-gradient(135deg, #9CE500 0%, #7BC400 100%); border: 3px solid #9CE500; color: #000; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;">Invest $100</button>
+                <button class="invest-btn" data-amount="all" style="padding: 15px; font-size: 18px; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); border: 3px solid #FFD700; color: #000; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;">Invest ALL</button>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button id="withdrawInvestment" style="flex: 1; padding: 15px; font-size: 18px; background: linear-gradient(135deg, #FF1493 0%, #FF69B4 100%); border: 3px solid #FF1493; color: #000; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;">Withdraw</button>
+                <button id="closeSuperUsd" style="flex: 1; padding: 15px; font-size: 18px; background: linear-gradient(135deg, #666 0%, #888 100%); border: 3px solid #666; color: #FFF; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;">Close</button>
+            </div>
         </div>
 
         <div id="gameOver">
@@ -678,17 +712,24 @@
 
     <script>
         const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', {
+            alpha: false, // Disable transparency for better performance
+            desynchronized: true // Allow low-latency rendering
+        });
 
         // Load merchant head image
         const merchantHeadImg = new Image();
         merchantHeadImg.src = 'crouton.png?v=' + Date.now(); // Add cache buster to force reload
 
+        // Load SuperUSD logo
+        const superUsdLogo = new Image();
+        superUsdLogo.src = 'Social_Logo_Round.svg?v=' + Date.now(); // Add cache buster
+
         // Game state
         const game = {
             running: false,
             score: 0,
-            money: 0,
+            money: 1000, // Test value - will change to 0 later
             health: 5,
             speed: 3,
             frameCount: 0,
@@ -709,12 +750,16 @@
             isNight: false,
             armor: 0,
             maxHealth: 5,
-            nextPiggyBank: Math.random() * 500,
+            nextPiggyBank: 50 + Math.random() * 400, // Random spawn point in first cycle (50-450)
             piggyBankSpawned: false,
-            volume: 0.5, // Volume level (0.0 to 1.0)
+            lastPiggyBankCycle: 0, // Track which 500-point cycle we're in
+            volume: 0.1, // Sound effects volume level (0.0 to 1.0)
+            musicVolume: 0.1, // Music volume level (0.0 to 1.0) - 10%
+            musicEnabled: true, // Music on/off toggle
             kills: 0, // Track enemy kills
             helicopterActive: false, // Track if helicopter is alive
             nextHelicopterScore: 500, // Next score milestone for helicopter spawn (100% chance)
+            nextRedHelicopterScore: 2000, // Next red helicopter spawn (starts at 2000)
             nextStreetLampScore: 100, // Next score milestone for street lamp spawn
             cutsceneActive: false, // Track if cutscene is playing
             cutscenePhase: 0, // Current phase of cutscene (0: entering, 1: dialog, 2: exiting)
@@ -724,9 +769,12 @@
             inShop: false, // Track if player is browsing shop
             hoveredItem: null, // Currently hovered shop item
             mouseX: 0, // Mouse position in shop
+            investment: 0, // Current investment amount
+            pendingPayout: 0, // Pending payout from previous investment
             mouseY: 0,
             autoRunning: false, // Track if pig is auto-running to basement
-            basementSpawned: false // Track if basement was spawned for current milestone
+            basementSpawned: false, // Track if basement was spawned for current milestone
+            hasAskedRestock: false // Track if player already asked about restock
         };
 
         // Game Statistics System
@@ -804,6 +852,16 @@
         // 8-bit weapon sound effects using Web Audio API
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
+        // Background music - optimized for performance
+        const backgroundMusic = new Audio('NewWaweHookers.ogg');
+        backgroundMusic.loop = true;
+        backgroundMusic.volume = game.musicVolume;
+        backgroundMusic.preload = 'auto'; // Preload the audio
+        backgroundMusic.preservesPitch = false; // Better performance
+
+        // Load audio asynchronously to prevent blocking
+        backgroundMusic.load();
+
         // Function to create 8-bit weapon sounds
         function create8BitSound(type) {
             const oscillator = audioContext.createOscillator();
@@ -867,156 +925,119 @@
             }
         }
 
-        // 8-bit Background Music System
-        let musicOscillators = [];
-        let musicGainNode = null;
-        let musicPlaying = false;
-        let currentNoteIndex = 0;
+        // Play button click sound
+        function playButtonSound(type = 'click') {
+            if (game.volume === 0) return; // Don't play if muted
 
-        // Noir 8-bit melody - Dark, mysterious, detective theme (frequencies in Hz)
-        const melody = [
-            // Opening phrase - Mysterious and moody (A minor)
-            { note: 440.00, duration: 0.4 },  // A4 (slow, contemplative)
-            { note: 493.88, duration: 0.3 },  // B4
-            { note: 523.25, duration: 0.3 },  // C5
-            { note: 587.33, duration: 0.5 },  // D5 (held)
-            { note: 523.25, duration: 0.3 },  // C5
-            { note: 493.88, duration: 0.3 },  // B4
-            { note: 440.00, duration: 0.6 },  // A4 (long, noir mood)
-            { note: 0, duration: 0.2 },       // Rest
+            try {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
 
-            // Second phrase - Jazz-influenced descent
-            { note: 659.25, duration: 0.4 },  // E5
-            { note: 622.25, duration: 0.25 }, // D#5 (chromatic, jazzy)
-            { note: 587.33, duration: 0.25 }, // D5
-            { note: 554.37, duration: 0.25 }, // C#5 (chromatic)
-            { note: 523.25, duration: 0.5 },  // C5
-            { note: 493.88, duration: 0.3 },  // B4
-            { note: 440.00, duration: 0.7 },  // A4 (resolution)
-            { note: 0, duration: 0.2 },       // Rest
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
 
-            // Third phrase - Minor key tension
-            { note: 392.00, duration: 0.4 },  // G4
-            { note: 440.00, duration: 0.3 },  // A4
-            { note: 466.16, duration: 0.3 },  // A#4 (tension)
-            { note: 493.88, duration: 0.5 },  // B4
-            { note: 523.25, duration: 0.6 },  // C5 (held)
-            { note: 493.88, duration: 0.3 },  // B4
-            { note: 440.00, duration: 0.5 },  // A4
-            { note: 0, duration: 0.3 },       // Rest
-
-            // Final phrase - Melancholic ending
-            { note: 329.63, duration: 0.4 },  // E4 (low, dark)
-            { note: 392.00, duration: 0.3 },  // G4
-            { note: 440.00, duration: 0.4 },  // A4
-            { note: 523.25, duration: 0.6 },  // C5
-            { note: 587.33, duration: 0.5 },  // D5
-            { note: 659.25, duration: 0.8 },  // E5 (long, atmospheric)
-            { note: 0, duration: 0.4 }        // Rest (breathing space)
-        ];
-
-        // Bass line - Walking bass with noir feel (lower octave for depth)
-        const bassLine = [
-            220.00, 220.00, 220.00, 220.00, // A3 (tonic, repeated)
-            246.94, 246.94, 261.63, 261.63, // B3, C4 (movement)
-            220.00, 220.00, 196.00, 196.00, // A3, G3 (descending)
-            164.81, 164.81, 220.00, 220.00, // E3, A3 (resolution)
-
-            329.63, 329.63, 329.63, 329.63, // E4 (higher, tension)
-            311.13, 311.13, 293.66, 293.66, // D#4, D4 (chromatic walk)
-            261.63, 261.63, 246.94, 246.94, // C4, B3 (descending)
-            220.00, 220.00, 220.00, 220.00, // A3 (back to tonic)
-
-            196.00, 196.00, 196.00, 196.00, // G3 (subdominant)
-            220.00, 220.00, 233.08, 233.08, // A3, A#3 (passing tone)
-            246.94, 246.94, 261.63, 261.63, // B3, C4 (building)
-            220.00, 220.00, 196.00, 196.00, // A3, G3
-
-            164.81, 164.81, 164.81, 164.81, // E3 (low, dark)
-            196.00, 196.00, 220.00, 220.00, // G3, A3 (rising)
-            261.63, 261.63, 293.66, 293.66, // C4, D4
-            329.63, 329.63, 220.00, 220.00  // E4, A3 (final resolution)
-        ];
-
-        function playBackgroundMusic() {
-            // Music disabled
-            return;
-            if (musicPlaying) return;
-            musicPlaying = true;
-            currentNoteIndex = 0;
-            playNextNote();
-        }
-
-        function playNextNote() {
-            if (!musicPlaying || game.volume === 0) {
-                if (game.volume === 0) {
-                    stopBackgroundMusic();
+                if (type === 'click') {
+                    // Short, pleasant click sound
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.05);
+                    gainNode.gain.setValueAtTime(game.volume * 0.2, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.05);
+                } else if (type === 'hover') {
+                    // Subtle hover sound
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+                    gainNode.gain.setValueAtTime(game.volume * 0.1, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.03);
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.03);
+                } else if (type === 'purchase') {
+                    // Success/purchase sound
+                    oscillator.type = 'triangle';
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.1);
+                    gainNode.gain.setValueAtTime(game.volume * 0.25, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.15);
+                } else if (type === 'error') {
+                    // Error/cannot afford sound
+                    oscillator.type = 'sawtooth';
+                    oscillator.frequency.setValueAtTime(300, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(150, audioContext.currentTime + 0.1);
+                    gainNode.gain.setValueAtTime(game.volume * 0.2, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.1);
                 }
-                return;
-            }
-
-            // Clean up previous oscillators
-            musicOscillators.forEach(osc => {
-                try {
-                    osc.stop();
-                } catch (e) {}
-            });
-            musicOscillators = [];
-
-            const currentNote = melody[currentNoteIndex % melody.length];
-            const currentBass = bassLine[currentNoteIndex % bassLine.length];
-
-            // Create gain node for music volume control
-            if (!musicGainNode) {
-                musicGainNode = audioContext.createGain();
-                musicGainNode.connect(audioContext.destination);
-            }
-            musicGainNode.gain.value = game.volume * 0.15; // Lower volume for background music
-
-            if (currentNote.note > 0) {
-                // Melody oscillator (square wave for 8-bit sound)
-                const melodyOsc = audioContext.createOscillator();
-                melodyOsc.type = 'square';
-                melodyOsc.frequency.setValueAtTime(currentNote.note, audioContext.currentTime);
-                melodyOsc.connect(musicGainNode);
-                melodyOsc.start(audioContext.currentTime);
-                melodyOsc.stop(audioContext.currentTime + currentNote.duration);
-                musicOscillators.push(melodyOsc);
-
-                // Bass oscillator (triangle wave for deeper bass)
-                const bassOsc = audioContext.createOscillator();
-                bassOsc.type = 'triangle';
-                bassOsc.frequency.setValueAtTime(currentBass, audioContext.currentTime);
-
-                const bassGain = audioContext.createGain();
-                bassGain.gain.value = 0.3; // Bass is quieter than melody
-                bassOsc.connect(bassGain);
-                bassGain.connect(musicGainNode);
-
-                bassOsc.start(audioContext.currentTime);
-                bassOsc.stop(audioContext.currentTime + currentNote.duration);
-                musicOscillators.push(bassOsc);
-            }
-
-            currentNoteIndex++;
-            setTimeout(() => playNextNote(), currentNote.duration * 1000);
-        }
-
-        function stopBackgroundMusic() {
-            musicPlaying = false;
-            musicOscillators.forEach(osc => {
-                try {
-                    osc.stop();
-                } catch (e) {}
-            });
-            musicOscillators = [];
-        }
-
-        function updateMusicVolume() {
-            if (musicGainNode) {
-                musicGainNode.gain.value = game.volume * 0.15;
+            } catch (e) {
+                console.log('Button sound play failed:', e);
             }
         }
+
+        // Play explosion sound for barrel
+        function playExplosionSound() {
+            if (game.volume === 0) return; // Don't play if muted
+
+            try {
+                // Main explosion rumble (low frequency)
+                const oscillator1 = audioContext.createOscillator();
+                const gainNode1 = audioContext.createGain();
+
+                oscillator1.connect(gainNode1);
+                gainNode1.connect(audioContext.destination);
+
+                oscillator1.type = 'sawtooth';
+                oscillator1.frequency.setValueAtTime(120, audioContext.currentTime);
+                oscillator1.frequency.exponentialRampToValueAtTime(40, audioContext.currentTime + 0.3);
+
+                gainNode1.gain.setValueAtTime(game.volume * 0.4, audioContext.currentTime);
+                gainNode1.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+
+                oscillator1.start(audioContext.currentTime);
+                oscillator1.stop(audioContext.currentTime + 0.3);
+
+                // Secondary explosion crack (high frequency)
+                const oscillator2 = audioContext.createOscillator();
+                const gainNode2 = audioContext.createGain();
+
+                oscillator2.connect(gainNode2);
+                gainNode2.connect(audioContext.destination);
+
+                oscillator2.type = 'square';
+                oscillator2.frequency.setValueAtTime(800, audioContext.currentTime);
+                oscillator2.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.15);
+
+                gainNode2.gain.setValueAtTime(game.volume * 0.3, audioContext.currentTime);
+                gainNode2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+
+                oscillator2.start(audioContext.currentTime);
+                oscillator2.stop(audioContext.currentTime + 0.15);
+
+                // Delayed rumble (bass aftershock)
+                const oscillator3 = audioContext.createOscillator();
+                const gainNode3 = audioContext.createGain();
+
+                oscillator3.connect(gainNode3);
+                gainNode3.connect(audioContext.destination);
+
+                oscillator3.type = 'triangle';
+                oscillator3.frequency.setValueAtTime(80, audioContext.currentTime + 0.1);
+                oscillator3.frequency.exponentialRampToValueAtTime(30, audioContext.currentTime + 0.4);
+
+                gainNode3.gain.setValueAtTime(game.volume * 0.35, audioContext.currentTime + 0.1);
+                gainNode3.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
+
+                oscillator3.start(audioContext.currentTime + 0.1);
+                oscillator3.stop(audioContext.currentTime + 0.4);
+            } catch (e) {
+                console.log('Explosion sound play failed:', e);
+            }
+        }
+
+        // Background music system removed for optimization
 
         // Player (Pig)
         const player = {
@@ -1039,7 +1060,7 @@
                 fireRate: 20,
                 damage: 2,
                 bulletSpeed: 18,
-                spread: 3,
+                spread: 1.68, // Reduced by 20% from 2.1 (originally 3, now reduced by 44% total)
                 name: 'Colt M1911',
                 magSize: 7,
                 reloadTime: 60,
@@ -1048,33 +1069,33 @@
                 bulletCount: 1
             },
             shotgun: {
-                fireRate: 45,
+                fireRate: 60, // Increased from 45 (slower fire rate)
                 damage: 3,
                 bulletSpeed: 12,
-                spread: 20,
+                spread: 9.072, // Reduced by 10% from 10.08 (originally 14.4, now reduced by 37% total)
                 name: 'Pump Shotgun',
-                magSize: 8,
+                magSize: 6, // Reduced from 8 to 6
                 reloadTime: 90,
                 auto: false,
-                price: 200,
+                price: 600,
                 bulletCount: 5,
-                pumpTime: 30
+                pumpTime: 50 // Increased from 30 (longer pump animation)
             },
             tommy: {
-                fireRate: 7,
+                fireRate: 8, // Reduced fire rate by 20% (was 7, now 8 - slower)
                 damage: 1,
                 bulletSpeed: 15,
-                spread: 6.8,
+                spread: 5.44, // Reduced spread by 20% (was 6.8, now 5.44 - more accurate)
                 name: 'Tommy Gun',
                 magSize: 50,
-                reloadTime: 120,
+                reloadTime: 108, // Faster reload by 10% (was 120, now 108)
                 auto: true,
-                price: 350,
+                price: 500,
                 bulletCount: 1
             },
             sniper: {
-                fireRate: 90,
-                damage: 10,
+                fireRate: 80,
+                damage: 5,
                 bulletSpeed: 30,
                 spread: 0,
                 name: 'Sniper Rifle',
@@ -1082,6 +1103,18 @@
                 reloadTime: 120,
                 auto: false,
                 price: 300,
+                bulletCount: 1
+            },
+            ak47: {
+                fireRate: 14, // Reduced fire rate by 30% (was 11, now 14 - slower)
+                damage: 3,
+                bulletSpeed: 19,
+                spread: 2,
+                name: 'AK-47',
+                magSize: 30,
+                reloadTime: 137, // Increased reload time by 30% (was 105, now 137)
+                auto: true,
+                price: 400,
                 bulletCount: 1
             }
         };
@@ -1095,9 +1128,10 @@
                 height: 180,
                 label: '🔫 WEAPONS',
                 items: [
-                    { id: 'shotgun', x: 140, y: 220, width: 80, height: 40 },
-                    { id: 'tommy', x: 250, y: 220, width: 75, height: 40 },
-                    { id: 'sniper', x: 355, y: 220, width: 85, height: 40 }
+                    { id: 'sniper', x: 100, y: 225, width: 70, height: 35 },   // $300 - leftmost
+                    { id: 'ak47', x: 180, y: 225, width: 70, height: 35 },     // $400 - second
+                    { id: 'tommy', x: 260, y: 225, width: 70, height: 35 },    // $500 - third
+                    { id: 'shotgun', x: 340, y: 225, width: 70, height: 35 }   // $600 - rightmost
                 ]
             },
             equipment: {
@@ -1111,13 +1145,12 @@
                     { id: 'health', x: 640, y: 200, width: 90, height: 60 }
                 ]
             },
-            boosts: {
-                x: 780,
-                y: 150,
-                width: 180,
-                height: 180,
-                label: '⚡ BOOSTS',
-                items: []
+            superusd: {
+                safeX: 850,  // Position on floor (right side)
+                safeY: 350,  // On the floor
+                safeWidth: 100,
+                safeHeight: 120,
+                labelY: 330  // Label above safe
             }
         };
 
@@ -1132,6 +1165,164 @@
         const droppedBarrels = []; // Explosive barrels dropped by helicopter
         const streetLamps = []; // Street lamps that appear every 150 points
         const basementEntrances = []; // Basement shop entrances
+
+        // Object pooling system for better performance (reduces GC pressure)
+        const objectPools = {
+            bullets: [],
+            enemies: [],
+            obstacles: []
+        };
+
+        // Get object from pool or create new one
+        function getFromPool(type) {
+            const pool = objectPools[type];
+            if (pool.length > 0) {
+                return pool.pop();
+            }
+            return {}; // Return empty object to be filled
+        }
+
+        // Return object to pool instead of deleting
+        function returnToPool(type, obj) {
+            const pool = objectPools[type];
+            if (pool.length < 50) { // Limit pool size to prevent memory bloat
+                // Clear object properties
+                for (let key in obj) {
+                    delete obj[key];
+                }
+                pool.push(obj);
+            }
+        }
+
+        // Building cache system for performance optimization
+        const buildingCache = {
+            distant: new Map(),
+            middle: new Map(),
+            foreground: new Map()
+        };
+
+        // Create cached building image
+        function getCachedBuilding(type, building, index) {
+            const cache = buildingCache[type];
+
+            if (cache.has(index)) {
+                return cache.get(index);
+            }
+
+            // Create offscreen canvas for this building
+            let canvas, width, height;
+
+            if (type === 'distant') {
+                width = building.width;
+                height = Math.ceil(building.height * 0.6) + 50; // Extra space for antenna
+                canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+
+                // Building body
+                ctx.fillStyle = building.color;
+                ctx.fillRect(0, height - building.height * 0.6, width, building.height * 0.6);
+
+                // Simple windows
+                ctx.fillStyle = 'rgba(255, 255, 200, 0.4)';
+                for (let j = 0; j < 4; j++) {
+                    for (let i = 0; i < 3; i++) {
+                        if (Math.random() > 0.5) {
+                            ctx.fillRect(30 + i * 40, height - building.height * 0.6 + 5 + j * 25, 15, 15);
+                        }
+                    }
+                }
+
+                // Antenna
+                if (building.hasAntenna) {
+                    ctx.fillStyle = 'rgba(100, 100, 100, 0.6)';
+                    ctx.fillRect(width / 2 - 2, 0, 4, 30);
+                    ctx.fillRect(width / 2 - 6, 0, 12, 6);
+                }
+            } else if (type === 'middle') {
+                width = building.width + 10;
+                height = building.height + 60;
+                canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+
+                const buildingY = height - building.height - 8;
+
+                // Building body
+                ctx.fillStyle = building.color;
+                ctx.fillRect(5, buildingY, building.width, building.height);
+
+                // Building edge highlight
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+                ctx.fillRect(5, buildingY, 8, building.height);
+
+                // Windows
+                ctx.fillStyle = 'rgba(255, 255, 150, 0.7)';
+                let windowIndex = 0;
+                for (let j = 0; j < Math.floor(building.height / 30); j++) {
+                    for (let i = 0; i < 6; i++) {
+                        if (building.windows[windowIndex]) {
+                            ctx.fillRect(25 + i * 50, buildingY + 10 + j * 30, 25, 25);
+                            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+                            ctx.fillRect(25 + i * 50, buildingY + 10 + j * 30 + 25, 25, 2);
+                            ctx.fillStyle = 'rgba(255, 255, 150, 0.7)';
+                        }
+                        windowIndex++;
+                    }
+                }
+
+                // Roof ledge
+                ctx.fillStyle = 'rgba(80, 80, 80, 0.8)';
+                ctx.fillRect(0, buildingY - 8, building.width + 10, 8);
+
+                // Roof decorations
+                if (building.roofType === 1) {
+                    ctx.fillStyle = '#666666';
+                    ctx.fillRect(building.width / 2 + 5 - 3, buildingY - 50, 6, 50);
+                    ctx.fillRect(building.width / 2 + 5 - 10, buildingY - 45, 20, 4);
+                    ctx.fillRect(building.width / 2 + 5 - 8, buildingY - 35, 16, 3);
+                }
+
+                // Air vents
+                if (building.hasVents) {
+                    ctx.fillStyle = '#555555';
+                    ctx.fillRect(55, buildingY - 15, 20, 10);
+                    ctx.fillRect(95, buildingY - 15, 20, 10);
+                }
+            } else { // foreground
+                width = building.width;
+                height = building.height;
+                canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+
+                // Building body
+                ctx.fillStyle = building.color;
+                ctx.fillRect(0, 0, width, height);
+
+                // Windows
+                ctx.fillStyle = 'rgba(255, 255, 100, 0.6)';
+                let windowIndex = 0;
+                for (let j = 0; j < Math.floor(height / 35); j++) {
+                    for (let i = 0; i < 4; i++) {
+                        if (building.windows[windowIndex]) {
+                            ctx.fillRect(30 + i * 55, 15 + j * 35, 30, 30);
+                        }
+                        windowIndex++;
+                    }
+                }
+
+                // Dark edge
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+                ctx.fillRect(width - 10, 0, 10, height);
+            }
+
+            cache.set(index, canvas);
+            return canvas;
+        }
 
         // Input
         const keys = {};
@@ -1404,6 +1595,81 @@
                     ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
                     ctx.fillRect(85, 33, 100, 1);
                 }
+            } else if (game.weapon === 'ak47') {
+                // AK-47 - realistic iconic design
+                // Wooden stock (distinctive AK feature)
+                ctx.fillStyle = '#654321';
+                ctx.fillRect(38, 33, 10, 5); // Stock base
+
+                // Main receiver/body (black metal)
+                ctx.fillStyle = '#1C1C1C';
+                ctx.fillRect(45, 30, 24, 8); // Main receiver body
+
+                // Dust cover (top of receiver)
+                ctx.fillStyle = '#2C2C2C';
+                ctx.fillRect(47, 29, 20, 2); // Dust cover on top
+
+                // Rear sight
+                ctx.fillStyle = '#4A4A4A';
+                ctx.fillRect(55, 27, 3, 3); // Rear sight block
+
+                // Barrel (extending forward)
+                ctx.fillStyle = '#2F4F4F';
+                ctx.fillRect(67, 32, 16, 4); // Barrel
+
+                // Gas tube (above barrel - iconic AK)
+                ctx.fillStyle = '#3A3A3A';
+                ctx.fillRect(67, 30, 14, 2); // Gas tube
+
+                // Wooden handguard (under gas tube)
+                ctx.fillStyle = '#8B4513';
+                ctx.fillRect(67, 36, 10, 2); // Lower handguard
+
+                // Front sight block
+                ctx.fillStyle = '#1C1C1C';
+                ctx.fillRect(79, 30, 2, 6); // Front sight block
+                ctx.fillStyle = '#4A4A4A';
+                ctx.fillRect(79, 30, 2, 2); // Sight post
+
+                // Slant muzzle brake (iconic AK feature)
+                ctx.fillStyle = '#2F4F4F';
+                ctx.fillRect(81, 31, 2, 5); // Muzzle brake
+                ctx.fillRect(82, 32, 2, 3); // Brake cut
+
+                // Curved magazine (most iconic AK feature)
+                ctx.fillStyle = '#4A4A4A';
+                ctx.fillRect(54, 38, 7, 3); // Top of mag
+                ctx.fillRect(55, 41, 6, 8); // Curved body
+                ctx.fillRect(56, 49, 4, 2); // Bottom curve
+
+                // Magazine lips (brass visible)
+                ctx.fillStyle = '#B8860B';
+                ctx.fillRect(55, 38, 5, 1); // Brass showing
+
+                // Pistol grip (distinctive angle)
+                ctx.fillStyle = '#654321';
+                ctx.fillRect(48, 38, 4, 6); // Grip
+                ctx.fillRect(47, 44, 5, 3); // Grip bottom
+
+                // Trigger guard
+                ctx.fillStyle = '#2F4F4F';
+                ctx.fillRect(52, 37, 4, 1); // Guard top
+                ctx.fillRect(52, 41, 4, 1); // Guard bottom
+
+                // Selector switch
+                ctx.fillStyle = '#8B0000';
+                ctx.fillRect(46, 34, 2, 3); // Selector lever
+
+                // Muzzle flash (when firing)
+                if (game.muzzleFlashSize > 0) {
+                    const flashSize = game.muzzleFlashSize * 1.3;
+                    ctx.fillStyle = '#FFA500';
+                    ctx.fillRect(83, 30 - flashSize/2, flashSize + 4, 8 + flashSize);
+                    ctx.fillStyle = '#FFFF00';
+                    ctx.fillRect(86, 32 - flashSize/4, flashSize + 2, 4 + flashSize/2);
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(88, 33, flashSize, 2);
+                }
             }
 
             // Fedora hat (gangster style)
@@ -1555,7 +1821,7 @@
                 }
             }
 
-            // LAYER 1: Distant buildings (slowest parallax)
+            // LAYER 1: Distant buildings (slowest parallax) - OPTIMIZED WITH CACHING
             distantBuildings.forEach((building, index) => {
                 building.x -= game.speed * 0.15;
 
@@ -1564,35 +1830,17 @@
                     building.height = 120 + Math.random() * 80;
                     building.color = `hsl(${200 + Math.random() * 40}, 20%, ${45 + Math.random() * 15}%)`;
                     building.hasAntenna = Math.random() > 0.6;
+                    // Clear cache when building regenerates
+                    buildingCache.distant.delete(index);
                 }
 
-                // Building body
-                ctx.fillStyle = building.color;
-                ctx.fillRect(building.x, canvas.height - 100 - building.height * 0.6, building.width, building.height * 0.6);
-
-                // Simple windows for distant buildings
-                ctx.fillStyle = 'rgba(255, 255, 200, 0.4)';
-                for (let j = 0; j < 4; j++) {
-                    for (let i = 0; i < 3; i++) {
-                        if (Math.random() > 0.5) {
-                            ctx.fillRect(
-                                building.x + 30 + i * 40,
-                                canvas.height - 95 - building.height * 0.6 + j * 25,
-                                15, 15
-                            );
-                        }
-                    }
-                }
-
-                // Antenna on some distant buildings
-                if (building.hasAntenna) {
-                    ctx.fillStyle = 'rgba(100, 100, 100, 0.6)';
-                    ctx.fillRect(building.x + building.width / 2 - 2, canvas.height - 100 - building.height * 0.6 - 30, 4, 30);
-                    ctx.fillRect(building.x + building.width / 2 - 6, canvas.height - 100 - building.height * 0.6 - 30, 12, 6);
-                }
+                // Use cached building image
+                const cachedImage = getCachedBuilding('distant', building, index);
+                const drawY = canvas.height - 100 - building.height * 0.6 - (building.hasAntenna ? 30 : 0);
+                ctx.drawImage(cachedImage, building.x, drawY);
             });
 
-            // LAYER 2: Middle buildings (medium parallax) - MAIN LAYER
+            // LAYER 2: Middle buildings (medium parallax) - OPTIMIZED WITH CACHING
             buildings.forEach((building, index) => {
                 building.x -= game.speed * 0.3;
 
@@ -1611,61 +1859,18 @@
                             building.windows.push(Math.random() > 0.7);
                         }
                     }
+
+                    // Clear cache when building regenerates
+                    buildingCache.middle.delete(index);
                 }
 
-                const buildingY = canvas.height - 100 - building.height;
-
-                // Building body
-                ctx.fillStyle = building.color;
-                ctx.fillRect(building.x, buildingY, building.width, building.height);
-
-                // Building edge highlight (3D effect)
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
-                ctx.fillRect(building.x, buildingY, 8, building.height);
-
-                // Windows
-                ctx.fillStyle = 'rgba(255, 255, 150, 0.7)';
-                let windowIndex = 0;
-                for (let j = 0; j < Math.floor(building.height / 30); j++) {
-                    for (let i = 0; i < 6; i++) {
-                        if (building.windows[windowIndex]) {
-                            ctx.fillRect(
-                                building.x + 20 + i * 50,
-                                buildingY + 10 + j * 30,
-                                25, 25
-                            );
-                            // Window frame shadow
-                            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-                            ctx.fillRect(building.x + 20 + i * 50, buildingY + 10 + j * 30 + 25, 25, 2);
-                            ctx.fillStyle = 'rgba(255, 255, 150, 0.7)';
-                        }
-                        windowIndex++;
-                    }
-                }
-
-                // Roof details
-                const roofY = buildingY;
-                ctx.fillStyle = 'rgba(80, 80, 80, 0.8)';
-                ctx.fillRect(building.x - 5, roofY - 8, building.width + 10, 8); // Roof ledge
-
-                // Roof type decorations
-                if (building.roofType === 1) {
-                    // Antenna/radio tower
-                    ctx.fillStyle = '#666666';
-                    ctx.fillRect(building.x + building.width / 2 - 3, roofY - 50, 6, 50);
-                    ctx.fillRect(building.x + building.width / 2 - 10, roofY - 45, 20, 4);
-                    ctx.fillRect(building.x + building.width / 2 - 8, roofY - 35, 16, 3);
-                }
-
-                // Air vents
-                if (building.hasVents) {
-                    ctx.fillStyle = '#555555';
-                    ctx.fillRect(building.x + 50, roofY - 15, 20, 10);
-                    ctx.fillRect(building.x + 90, roofY - 15, 20, 10);
-                }
+                // Use cached building image
+                const cachedImage = getCachedBuilding('middle', building, index);
+                const drawY = canvas.height - 100 - building.height - 8;
+                ctx.drawImage(cachedImage, building.x - 5, drawY);
             });
 
-            // LAYER 3: Foreground buildings (fastest parallax)
+            // LAYER 3: Foreground buildings (fastest parallax) - OPTIMIZED WITH CACHING
             foregroundBuildings.forEach((building, index) => {
                 building.x -= game.speed * 0.5;
 
@@ -1681,33 +1886,15 @@
                             building.windows.push(Math.random() > 0.6);
                         }
                     }
+
+                    // Clear cache when building regenerates
+                    buildingCache.foreground.delete(index);
                 }
 
-                const buildingY = canvas.height - 100 - building.height;
-
-                // Building body (darker, closer)
-                ctx.fillStyle = building.color;
-                ctx.fillRect(building.x, buildingY, building.width, building.height);
-
-                // Windows
-                ctx.fillStyle = 'rgba(255, 255, 100, 0.6)';
-                let windowIndex = 0;
-                for (let j = 0; j < Math.floor(building.height / 35); j++) {
-                    for (let i = 0; i < 4; i++) {
-                        if (building.windows[windowIndex]) {
-                            ctx.fillRect(
-                                building.x + 30 + i * 55,
-                                buildingY + 15 + j * 35,
-                                30, 30
-                            );
-                        }
-                        windowIndex++;
-                    }
-                }
-
-                // Dark edge for depth
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
-                ctx.fillRect(building.x + building.width - 10, buildingY, 10, building.height);
+                // Use cached building image
+                const cachedImage = getCachedBuilding('foreground', building, index);
+                const drawY = canvas.height - 100 - building.height;
+                ctx.drawImage(cachedImage, building.x, drawY);
             });
 
             // GROUND - Detailed street with sidewalks
@@ -1737,22 +1924,39 @@
                 return;
             }
 
-            const types = ['alpha', 'warrior', 'beast'];
-            const type = types[Math.floor(Math.random() * types.length)];
+            const spawnX = canvas.width;
 
-            enemies.push({
-                x: canvas.width,
-                y: 400,
-                width: 60,
-                height: 100,
-                health: type === 'beast' ? 4 : (type === 'alpha' ? 3 : 2),
-                type: type,
-                speed: 2 + Math.random() * 1.5
-            });
+            // Check if basement entrance is near the spawn area (same safe zone as obstacles)
+            for (let i = 0; i < basementEntrances.length; i++) {
+                const entrance = basementEntrances[i];
+                const bufferBefore = 2000; // Extra long safe zone before entrance
+                const bufferAfter = 1500;  // Safe zone after entrance
+                const entranceWidth = 200;
+
+                if (spawnX >= entrance.x - bufferBefore && spawnX <= entrance.x + entranceWidth + bufferAfter) {
+                    // Entrance is too close, don't spawn enemy
+                    return;
+                }
+            }
+
+            const types = ['alpha', 'warrior', 'beast'];
+            const enemyType = types[Math.floor(Math.random() * types.length)];
+
+            // Get enemy from pool - OPTIMIZED
+            const enemy = getFromPool('enemies');
+            enemy.x = canvas.width;
+            enemy.y = 400;
+            enemy.width = 60;
+            enemy.height = 100;
+            enemy.health = enemyType === 'beast' ? 4 : (enemyType === 'alpha' ? 3 : 2);
+            enemy.type = enemyType;
+            enemy.speed = 2 + Math.random() * 1.5;
+
+            enemies.push(enemy);
         }
 
         // Spawn helicopter enemy
-        function spawnHelicopter() {
+        function spawnHelicopter(isRed = false) {
             if (game.helicopterActive) {
                 return; // Only one helicopter at a time
             }
@@ -1764,8 +1968,8 @@
                 y: 250, // Flying at jump height
                 width: 210, // 3x bigger (70 * 3)
                 height: 150, // 3x bigger (50 * 3)
-                health: 8, // 4 pistol shots (doubled from 4)
-                type: 'helicopter',
+                health: isRed ? 32 : 12, // Red helicopter has 32 HP, normal has 12 HP
+                type: isRed ? 'red_helicopter' : 'helicopter',
                 speed: 0, // Stationary - stays on right side
                 dropTimer: 120, // Drop barrel every 2 seconds (120 frames at 60fps)
                 dropCooldown: 120,
@@ -1775,15 +1979,16 @@
 
         // Spawn obstacle
         function spawnObstacle() {
+            const spawnX = canvas.width;
+
             // Check if piggy bank building is near the spawn area
             for (let i = 0; i < piggyBanks.length; i++) {
                 const bank = piggyBanks[i];
                 // Don't spawn obstacles if building is in or near spawn area
-                // Bank extends from bank.x to bank.x + bank.width (720px wide)
-                // Add buffer zone of 200px before and after building
-                const bufferBefore = 200;
-                const bufferAfter = 200;
-                const spawnX = canvas.width;
+                // Bank extends from bank.x to bank.x + bank.width (520px wide)
+                // Add very large buffer zone before and after building for clear area
+                const bufferBefore = 1200; // Large safe zone before building
+                const bufferAfter = 1200;  // Large safe zone after building
 
                 if (spawnX >= bank.x - bufferBefore && spawnX <= bank.x + bank.width + bufferAfter) {
                     // Building is too close, don't spawn
@@ -1791,7 +1996,22 @@
                 }
             }
 
-            const types = ['crate', 'barrel', 'tire', 'cone', 'trash', 'fence', 'hydrant', 'mailbox', 'dumpster', 'sign'];
+            // Check if basement entrance is near the spawn area
+            for (let i = 0; i < basementEntrances.length; i++) {
+                const entrance = basementEntrances[i];
+                // Basement entrance width is 200px
+                // Add very large buffer zone before and after entrance for safe approach
+                const bufferBefore = 2000; // Extra long safe zone before entrance (2000px)
+                const bufferAfter = 1500;  // Safe zone after entrance
+                const entranceWidth = 200;
+
+                if (spawnX >= entrance.x - bufferBefore && spawnX <= entrance.x + entranceWidth + bufferAfter) {
+                    // Entrance is too close, don't spawn
+                    return null;
+                }
+            }
+
+            const types = ['crate', 'barrel', 'tire', 'cone', 'trash', 'fence', 'hydrant', 'mailbox', 'dumpster', 'sign', 'car'];
             const type = types[Math.floor(Math.random() * types.length)];
 
             let width, height, y;
@@ -1819,6 +2039,9 @@
             } else if (type === 'sign') {
                 width = 25;
                 height = 50;
+            } else if (type === 'car') {
+                width = 200;  // 80 * 2.5
+                height = 112; // 45 * 2.5
             } else {
                 width = 20 + Math.random() * 15;
                 height = 25 + Math.random() * 20;
@@ -1840,6 +2063,51 @@
             return obstacle;
         }
 
+        // Spawn car obstacle
+        function spawnCarObstacle() {
+            const spawnX = canvas.width;
+
+            // Check if piggy bank building is near the spawn area
+            for (let i = 0; i < piggyBanks.length; i++) {
+                const bank = piggyBanks[i];
+                const bufferBefore = 1200; // Large safe zone before building
+                const bufferAfter = 1200;  // Large safe zone after building
+
+                if (spawnX >= bank.x - bufferBefore && spawnX <= bank.x + bank.width + bufferAfter) {
+                    return null;
+                }
+            }
+
+            // Check if basement entrance is near the spawn area
+            for (let i = 0; i < basementEntrances.length; i++) {
+                const entrance = basementEntrances[i];
+                const bufferBefore = 2000; // Extra long safe zone before entrance (2000px)
+                const bufferAfter = 1500;  // Safe zone after entrance
+                const entranceWidth = 200;
+
+                if (spawnX >= entrance.x - bufferBefore && spawnX <= entrance.x + entranceWidth + bufferAfter) {
+                    return null;
+                }
+            }
+
+            const width = 200;  // 80 * 2.5
+            const height = 112; // 45 * 2.5
+            const y = 500 - height;
+
+            const car = {
+                x: canvas.width,
+                y: y,
+                width: width,
+                height: height,
+                type: 'car',
+                animFrame: 0,
+                colorVariant: Math.floor(Math.random() * 3) // 0, 1, or 2 for 3 color variants
+            };
+
+            obstacles.push(car);
+            return car;
+        }
+
         // Draw enemy (werewolf) - REALISTIC AND DETAILED
         function drawEnemy(enemy) {
             ctx.save();
@@ -1849,17 +2117,23 @@
             const ey = enemy.y;
 
             // Check if it's a helicopter enemy
-            if (enemy.type === 'helicopter') {
+            if (enemy.type === 'helicopter' || enemy.type === 'red_helicopter') {
                 // Draw Apache-style attack helicopter (3x scale)
                 const rotorOffset = Math.sin(game.frameCount * 0.5) * 4;
                 const scale = 3;
 
+                // Color scheme based on helicopter type
+                const isRed = enemy.type === 'red_helicopter';
+                const mainColor = isRed ? '#CC0000' : '#3A4A2A'; // Bright red or dark green
+                const secondaryColor = isRed ? '#FF0000' : '#2A3A1A'; // Pure red or darker green
+                const cockpitColor = isRed ? '#8B0000' : '#1A2A0A'; // Dark red or very dark green
+
                 // Long tail boom (extending far back)
-                ctx.fillStyle = '#3A4A2A'; // Dark military green
+                ctx.fillStyle = mainColor;
                 ctx.fillRect(ex - 30*scale, ey + 28*scale, 50*scale, 6*scale); // Long thin tail
 
                 // Tail rotor mechanism
-                ctx.fillStyle = '#2A3A1A';
+                ctx.fillStyle = secondaryColor;
                 ctx.fillRect(ex - 32*scale, ey + 25*scale, 6*scale, 12*scale); // Tail fin
 
                 // Tail rotor (spinning vertically)
@@ -1872,20 +2146,20 @@
                 }
 
                 // Main body (sleek, angular Apache-style)
-                ctx.fillStyle = '#3A4A2A';
+                ctx.fillStyle = mainColor;
                 ctx.fillRect(ex + 10*scale, ey + 24*scale, 55*scale, 22*scale); // Main fuselage
 
                 // Angular nose (aggressive front)
-                ctx.fillStyle = '#2A3A1A';
+                ctx.fillStyle = secondaryColor;
                 ctx.fillRect(ex + 60*scale, ey + 26*scale, 12*scale, 18*scale); // Pointed nose
                 ctx.fillRect(ex + 70*scale, ey + 28*scale, 5*scale, 14*scale); // Nose tip
 
                 // Cockpit (tandem seating - Apache style)
-                ctx.fillStyle = '#1A2A0A';
+                ctx.fillStyle = cockpitColor;
                 ctx.fillRect(ex + 45*scale, ey + 18*scale, 20*scale, 18*scale); // Rear cockpit
 
                 // Windshield (dark tinted)
-                ctx.fillStyle = '#0A1A0A';
+                ctx.fillStyle = isRed ? '#4B0000' : '#0A1A0A';
                 ctx.fillRect(ex + 47*scale, ey + 20*scale, 16*scale, 10*scale);
                 ctx.fillRect(ex + 62*scale, ey + 20*scale, 10*scale, 10*scale); // Front cockpit glass
 
@@ -2237,6 +2511,127 @@
                 // Post
                 ctx.fillStyle = '#808080';
                 ctx.fillRect(obstacle.x + obstacle.width / 2 - 3, obstacle.y + 25, 6, 25);
+            } else if (obstacle.type === 'car') {
+                // Pixel art regular sedan car (2.5x scale)
+                const carX = obstacle.x;
+                const carY = obstacle.y;
+
+                // Color variants: 0=Red, 1=Blue, 2=Black
+                const colorVariant = obstacle.colorVariant || 0;
+                let bodyColor, bodyDark, bodyLight;
+
+                if (colorVariant === 0) {
+                    // Red car
+                    bodyColor = '#CC0000';
+                    bodyDark = '#8B0000';
+                    bodyLight = '#FF3333';
+                } else if (colorVariant === 1) {
+                    // Blue car
+                    bodyColor = '#0066CC';
+                    bodyDark = '#003D7A';
+                    bodyLight = '#3399FF';
+                } else {
+                    // Black car
+                    bodyColor = '#2A2A2A';
+                    bodyDark = '#0A0A0A';
+                    bodyLight = '#4A4A4A';
+                }
+
+                // Main body (scaled 2.5x from original 60x20)
+                ctx.fillStyle = bodyColor;
+                ctx.fillRect(carX + 25, carY + 37, 150, 50);
+
+                // Body highlights
+                ctx.fillStyle = bodyLight;
+                ctx.fillRect(carX + 30, carY + 40, 140, 8);
+
+                // Body shadows
+                ctx.fillStyle = bodyDark;
+                ctx.fillRect(carX + 25, carY + 75, 150, 12);
+
+                // Roof/cabin (scaled 2.5x from 35x15)
+                ctx.fillStyle = bodyDark;
+                ctx.fillRect(carX + 50, carY + 20, 87, 37);
+
+                // Hood (scaled 2.5x from 15x12)
+                ctx.fillStyle = bodyColor;
+                ctx.fillRect(carX + 137, carY + 45, 37, 30);
+
+                // Hood highlight
+                ctx.fillStyle = bodyLight;
+                ctx.fillRect(carX + 140, carY + 48, 30, 6);
+
+                // Trunk (scaled 2.5x from 10x12)
+                ctx.fillStyle = bodyColor;
+                ctx.fillRect(carX + 25, carY + 45, 25, 30);
+
+                // Windows - front (scaled 2.5x from 12x10)
+                ctx.fillStyle = '#1A3A5C';
+                ctx.fillRect(carX + 55, carY + 25, 30, 25);
+
+                // Windows - rear (scaled 2.5x from 12x10)
+                ctx.fillStyle = '#1A3A5C';
+                ctx.fillRect(carX + 100, carY + 25, 30, 25);
+
+                // Window highlights
+                ctx.fillStyle = 'rgba(135, 206, 235, 0.3)';
+                ctx.fillRect(carX + 58, carY + 27, 8, 20);
+                ctx.fillRect(carX + 103, carY + 27, 8, 20);
+
+                // Wheels - rear (scaled 2.5x from 12x10)
+                ctx.fillStyle = '#1C1C1C';
+                ctx.fillRect(carX + 37, carY + 87, 30, 25);
+
+                // Wheels - front (scaled 2.5x from 12x10)
+                ctx.fillStyle = '#1C1C1C';
+                ctx.fillRect(carX + 132, carY + 87, 30, 25);
+
+                // Wheel rims - rear (scaled 2.5x from 6x4)
+                ctx.fillStyle = '#C0C0C0';
+                ctx.fillRect(carX + 45, carY + 95, 15, 10);
+
+                // Wheel rims - front (scaled 2.5x from 6x4)
+                ctx.fillStyle = '#C0C0C0';
+                ctx.fillRect(carX + 140, carY + 95, 15, 10);
+
+                // Headlights (scaled 2.5x from 3x4)
+                ctx.fillStyle = '#FFFFE0';
+                ctx.fillRect(carX + 170, carY + 50, 7, 10);
+                ctx.fillRect(carX + 170, carY + 65, 7, 10);
+
+                // Headlight glow
+                ctx.fillStyle = 'rgba(255, 255, 200, 0.5)';
+                ctx.fillRect(carX + 177, carY + 52, 5, 6);
+                ctx.fillRect(carX + 177, carY + 67, 5, 6);
+
+                // Taillights (scaled 2.5x from 2x3)
+                ctx.fillStyle = '#DC143C';
+                ctx.fillRect(carX + 22, carY + 50, 5, 7);
+                ctx.fillRect(carX + 22, carY + 67, 5, 7);
+
+                // License plate - rear (scaled 2.5x from 8x3)
+                ctx.fillStyle = '#FFD700';
+                ctx.fillRect(carX + 32, carY + 80, 20, 7);
+
+                // License plate - front (scaled 2.5x)
+                ctx.fillStyle = '#FFD700';
+                ctx.fillRect(carX + 165, carY + 80, 12, 7);
+
+                // Side mirror
+                ctx.fillStyle = bodyDark;
+                ctx.fillRect(carX + 48, carY + 32, 5, 8);
+
+                // Door line detail
+                ctx.fillStyle = bodyDark;
+                ctx.fillRect(carX + 85, carY + 45, 3, 35);
+
+                // Chrome bumper - front
+                ctx.fillStyle = '#C0C0C0';
+                ctx.fillRect(carX + 175, carY + 80, 5, 7);
+
+                // Chrome bumper - rear
+                ctx.fillStyle = '#C0C0C0';
+                ctx.fillRect(carX + 20, carY + 80, 5, 7);
             }
         }
 
@@ -2283,78 +2678,78 @@
             ctx.restore();
         }
 
-        // Draw street lamp (2x taller, slightly wider)
+        // Draw street lamp (2.6x taller - 30% increase from 2x, wider)
         function drawStreetLamp(lamp) {
             const centerX = lamp.x + lamp.width / 2;
 
-            // Lamp post (2x taller)
+            // Lamp post (2.6x taller - 30% increase)
             ctx.fillStyle = '#2C2C2C'; // Dark gray
-            ctx.fillRect(centerX - 6, lamp.y + 35, 12, 165); // Vertical post (thicker and taller)
+            ctx.fillRect(centerX - 8, lamp.y + 45, 16, 215); // Vertical post (thicker and taller: 165*1.3=214.5)
 
             // Top bracket (connects lamp to post)
-            ctx.fillRect(centerX - 15, lamp.y + 30, 15, 8); // Horizontal bracket
+            ctx.fillRect(centerX - 19, lamp.y + 39, 19, 10); // Horizontal bracket (scaled 1.3x)
 
-            // Lamp housing (larger)
+            // Lamp housing (larger - 1.3x)
             ctx.fillStyle = '#1C1C1C'; // Very dark gray/black
-            ctx.fillRect(centerX - 20, lamp.y, 40, 35); // Lamp box (2x bigger)
+            ctx.fillRect(centerX - 26, lamp.y, 52, 45); // Lamp box (40*1.3=52, 35*1.3=45)
 
             // Lamp glass/bulb
             if (game.isNight) {
-                // Soft, smooth multi-layer glow effect
-                // Outermost glow layer (very soft)
-                const outerGradient = ctx.createRadialGradient(centerX, lamp.y + 17, 0, centerX, lamp.y + 17, 80);
-                outerGradient.addColorStop(0, 'rgba(255, 215, 0, 0.15)');
-                outerGradient.addColorStop(0.3, 'rgba(255, 215, 0, 0.08)');
-                outerGradient.addColorStop(0.6, 'rgba(255, 215, 0, 0.03)');
+                // Soft, smooth multi-layer glow effect (wider and more diffused)
+                // Outermost glow layer (very soft and wide) - 50% wider
+                const outerGradient = ctx.createRadialGradient(centerX, lamp.y + 22, 0, centerX, lamp.y + 22, 120);
+                outerGradient.addColorStop(0, 'rgba(255, 215, 0, 0.2)'); // Increased opacity
+                outerGradient.addColorStop(0.3, 'rgba(255, 215, 0, 0.12)'); // Increased opacity
+                outerGradient.addColorStop(0.6, 'rgba(255, 215, 0, 0.05)');
                 outerGradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
                 ctx.fillStyle = outerGradient;
-                ctx.fillRect(centerX - 80, lamp.y - 63, 160, 160);
+                ctx.fillRect(centerX - 120, lamp.y - 98, 240, 240);
 
-                // Middle glow layer
-                const middleGradient = ctx.createRadialGradient(centerX, lamp.y + 17, 0, centerX, lamp.y + 17, 50);
-                middleGradient.addColorStop(0, 'rgba(255, 215, 0, 0.3)');
-                middleGradient.addColorStop(0.4, 'rgba(255, 215, 0, 0.15)');
-                middleGradient.addColorStop(0.7, 'rgba(255, 215, 0, 0.05)');
+                // Middle glow layer (wider)
+                const middleGradient = ctx.createRadialGradient(centerX, lamp.y + 22, 0, centerX, lamp.y + 22, 75);
+                middleGradient.addColorStop(0, 'rgba(255, 215, 0, 0.35)'); // Increased opacity
+                middleGradient.addColorStop(0.4, 'rgba(255, 215, 0, 0.2)'); // Increased opacity
+                middleGradient.addColorStop(0.7, 'rgba(255, 215, 0, 0.08)');
                 middleGradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
                 ctx.fillStyle = middleGradient;
-                ctx.fillRect(centerX - 50, lamp.y - 33, 100, 100);
+                ctx.fillRect(centerX - 75, lamp.y - 53, 150, 150);
 
                 // Inner glow (bright core)
-                const innerGradient = ctx.createRadialGradient(centerX, lamp.y + 17, 0, centerX, lamp.y + 17, 25);
-                innerGradient.addColorStop(0, 'rgba(255, 235, 150, 0.6)');
-                innerGradient.addColorStop(0.5, 'rgba(255, 215, 0, 0.4)');
-                innerGradient.addColorStop(1, 'rgba(255, 215, 0, 0.1)');
+                const innerGradient = ctx.createRadialGradient(centerX, lamp.y + 22, 0, centerX, lamp.y + 22, 33);
+                innerGradient.addColorStop(0, 'rgba(255, 235, 150, 0.65)');
+                innerGradient.addColorStop(0.5, 'rgba(255, 215, 0, 0.45)');
+                innerGradient.addColorStop(1, 'rgba(255, 215, 0, 0.15)');
                 ctx.fillStyle = innerGradient;
-                ctx.fillRect(centerX - 25, lamp.y - 8, 50, 50);
+                ctx.fillRect(centerX - 33, lamp.y - 11, 66, 66);
 
-                // Yellow light bulb (bright center)
+                // Yellow light bulb (bright center) - scaled 1.3x
                 ctx.fillStyle = '#FFD700';
-                ctx.fillRect(centerX - 16, lamp.y + 4, 32, 28);
+                ctx.fillRect(centerX - 21, lamp.y + 5, 42, 36);
 
-                // Light beam downward (soft gradient cone)
-                const beamGradient = ctx.createLinearGradient(centerX, lamp.y + 35, centerX, lamp.y + 210);
-                beamGradient.addColorStop(0, 'rgba(255, 215, 0, 0.25)');
-                beamGradient.addColorStop(0.3, 'rgba(255, 215, 0, 0.12)');
-                beamGradient.addColorStop(0.6, 'rgba(255, 215, 0, 0.05)');
+                // Light beam downward (soft gradient cone) - wider and more diffused
+                const beamGradient = ctx.createLinearGradient(centerX, lamp.y + 45, centerX, lamp.y + 273);
+                beamGradient.addColorStop(0, 'rgba(255, 215, 0, 0.3)'); // Increased opacity
+                beamGradient.addColorStop(0.3, 'rgba(255, 215, 0, 0.18)'); // Increased opacity
+                beamGradient.addColorStop(0.6, 'rgba(255, 215, 0, 0.08)');
                 beamGradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
                 ctx.fillStyle = beamGradient;
-                // Cone shape (wider at bottom)
+                // Cone shape (much wider at bottom for more diffusion)
                 ctx.beginPath();
-                ctx.moveTo(centerX - 20, lamp.y + 35);
-                ctx.lineTo(centerX - 70, lamp.y + 210);
-                ctx.lineTo(centerX + 70, lamp.y + 210);
-                ctx.lineTo(centerX + 20, lamp.y + 35);
+                ctx.moveTo(centerX - 26, lamp.y + 45);
+                ctx.lineTo(centerX - 110, lamp.y + 273); // Wider spread (70*1.5=105, rounded to 110)
+                ctx.lineTo(centerX + 110, lamp.y + 273);
+                ctx.lineTo(centerX + 26, lamp.y + 45);
                 ctx.closePath();
                 ctx.fill();
             } else {
-                // Off during day (dark glass, larger)
+                // Off during day (dark glass, scaled 1.3x)
                 ctx.fillStyle = '#4A4A4A'; // Dark gray glass
-                ctx.fillRect(centerX - 16, lamp.y + 4, 32, 28);
+                ctx.fillRect(centerX - 21, lamp.y + 5, 42, 36);
             }
 
-            // Base (wider)
+            // Base (wider and lower)
             ctx.fillStyle = '#3C3C3C';
-            ctx.fillRect(centerX - 15, lamp.y + 200, 30, 10);
+            ctx.fillRect(centerX - 19, lamp.y + 260, 38, 13); // Scaled 1.3x
         }
 
         // Draw merchant character with cloak and legs (based on crouton.png mask)
@@ -2427,7 +2822,7 @@
                 // Draw the image centered, scaled larger to match body
                 const headWidth = 110;
                 const headHeight = 110;
-                ctx.drawImage(merchantHeadImg, x - headWidth/2, y - 35, headWidth, headHeight);
+                ctx.drawImage(merchantHeadImg, x - headWidth/2 - 5, y - 35, headWidth, headHeight); // Shifted 5px left
             }
 
             ctx.restore();
@@ -2505,24 +2900,24 @@
 
         // Draw shop counter
         function drawShopCounter(counter) {
-            // Wooden board on wall
-            ctx.fillStyle = '#654321'; // Dark brown wood
+            // Gray metal board on wall
+            ctx.fillStyle = '#555555'; // Medium gray
             ctx.fillRect(counter.x, counter.y, counter.width, counter.height);
 
-            // Wood grain texture (horizontal lines)
-            ctx.fillStyle = '#4A2F1A';
+            // Metal texture (horizontal lines)
+            ctx.fillStyle = '#3A3A3A';
             for (let i = 0; i < 8; i++) {
                 const lineY = counter.y + i * (counter.height / 8);
                 ctx.fillRect(counter.x, lineY, counter.width, 2);
             }
 
-            // Board edge/border (lighter wood frame)
-            ctx.strokeStyle = '#8B4513';
+            // Board edge/border (lighter gray frame)
+            ctx.strokeStyle = '#777777';
             ctx.lineWidth = 6;
             ctx.strokeRect(counter.x, counter.y, counter.width, counter.height);
 
             // Nails/screws in corners
-            ctx.fillStyle = '#2C2C2C';
+            ctx.fillStyle = '#1C1C1C';
             const nailSize = 8;
             // Top left
             ctx.fillRect(counter.x + 10, counter.y + 10, nailSize, nailSize);
@@ -2540,6 +2935,165 @@
             // Adjust text position for equipment board (shift left)
             const textOffset = counter.label === '🛡️ EQUIPMENT' ? -20 : 0;
             ctx.fillText(counter.label, counter.x + counter.width / 2 + textOffset, counter.y + 35);
+        }
+
+        // Draw SuperUSD safe
+        function drawSuperUsdSafe() {
+            const safe = shopCounters.superusd;
+            const safeX = safe.safeX;
+            const safeY = safe.safeY;
+            const safeWidth = safe.safeWidth;
+            const safeHeight = safe.safeHeight;
+
+            // Label above safe with arrow
+            ctx.fillStyle = '#9CE500';
+            ctx.font = 'bold 24px Courier New';
+            ctx.textAlign = 'center';
+            ctx.fillText('SuperUSD', safeX + safeWidth / 2, safe.labelY);
+            ctx.fillText('↓', safeX + safeWidth / 2, safe.labelY + 20);
+
+            // Safe body (dark metallic gray)
+            ctx.fillStyle = '#2A2A2A';
+            ctx.fillRect(safeX, safeY, safeWidth, safeHeight);
+
+            // Safe border (3D effect)
+            ctx.strokeStyle = '#5A5A5A';
+            ctx.lineWidth = 5;
+            ctx.strokeRect(safeX, safeY, safeWidth, safeHeight);
+
+            // Inner border (darker)
+            ctx.strokeStyle = '#1A1A1A';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(safeX + 5, safeY + 5, safeWidth - 10, safeHeight - 10);
+
+            // Metal rivets (screws on corners)
+            ctx.fillStyle = '#6A6A6A';
+            const rivetSize = 6;
+            // Top corners
+            ctx.fillRect(safeX + 8, safeY + 8, rivetSize, rivetSize);
+            ctx.fillRect(safeX + safeWidth - 14, safeY + 8, rivetSize, rivetSize);
+            // Bottom corners
+            ctx.fillRect(safeX + 8, safeY + safeHeight - 14, rivetSize, rivetSize);
+            ctx.fillRect(safeX + safeWidth - 14, safeY + safeHeight - 14, rivetSize, rivetSize);
+
+            // Original SVG logo in center
+            const logoSize = 60;
+            const logoX = safeX + (safeWidth - logoSize) / 2;
+            const logoY = safeY + 15;
+
+            if (superUsdLogo.complete && superUsdLogo.naturalWidth > 0) {
+                ctx.drawImage(superUsdLogo, logoX, logoY, logoSize, logoSize);
+            } else {
+                // Fallback if logo not loaded - draw green circle
+                ctx.fillStyle = '#9CE500';
+                ctx.beginPath();
+                ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#254544';
+                ctx.font = 'bold 20px Courier New';
+                ctx.textAlign = 'center';
+                ctx.fillText('$', logoX + logoSize / 2, logoY + logoSize / 2 + 8);
+            }
+
+            // Combination lock dial (below logo)
+            const lockY = safeY + safeHeight - 35;
+            const lockX = safeX + safeWidth / 2;
+
+            ctx.fillStyle = '#1A1A1A';
+            ctx.beginPath();
+            ctx.arc(lockX, lockY, 15, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = '#6A6A6A';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Lock handle (golden)
+            ctx.fillStyle = '#FFD700';
+            ctx.fillRect(lockX - 5, lockY - 2, 10, 4);
+
+            // Lock notches
+            ctx.strokeStyle = '#8A8A8A';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < 12; i++) {
+                const angle = (i / 12) * Math.PI * 2;
+                const x1 = lockX + Math.cos(angle) * 12;
+                const y1 = lockY + Math.sin(angle) * 12;
+                const x2 = lockX + Math.cos(angle) * 15;
+                const y2 = lockY + Math.sin(angle) * 15;
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+            }
+
+            // Payout indicator (glowing green badge if there's pending payout)
+            if (game.pendingPayout > 0) {
+                // Glowing badge in top-right corner
+                const badgeX = safeX + safeWidth - 15;
+                const badgeY = safeY + 15;
+                const badgeRadius = 12;
+
+                // Pulsing glow effect
+                const pulseIntensity = 0.5 + Math.sin(game.frameCount * 0.1) * 0.3;
+                ctx.shadowColor = '#9CE500';
+                ctx.shadowBlur = 20 * pulseIntensity;
+
+                // Green circle
+                ctx.fillStyle = '#9CE500';
+                ctx.beginPath();
+                ctx.arc(badgeX, badgeY, badgeRadius, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Dollar sign
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = '#000';
+                ctx.font = 'bold 16px Courier New';
+                ctx.textAlign = 'center';
+                ctx.fillText('$', badgeX, badgeY + 6);
+
+                // Exclamation mark animation
+                const offset = Math.sin(game.frameCount * 0.15) * 3;
+                ctx.fillStyle = '#FFD700';
+                ctx.font = 'bold 20px Courier New';
+                ctx.fillText('!', badgeX + 18, badgeY - 8 + offset);
+            }
+
+            // Hover effect
+            const mouseInSafe = game.mouseX >= safeX && game.mouseX <= safeX + safeWidth &&
+                               game.mouseY >= safeY && game.mouseY <= safeY + safeHeight;
+
+            if (mouseInSafe && game.inShop) {
+                ctx.strokeStyle = '#9CE500';
+                ctx.lineWidth = 4;
+                ctx.strokeRect(safeX - 5, safeY - 5, safeWidth + 10, safeHeight + 10);
+                ctx.shadowColor = '#9CE500';
+                ctx.shadowBlur = 20;
+
+                // Tooltip (to the left of safe)
+                const tooltipX = safeX - 170;
+                const tooltipY = safeY + 20;
+
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.95)';
+                ctx.fillRect(tooltipX, tooltipY, 160, 90);
+                ctx.strokeStyle = '#9CE500';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(tooltipX, tooltipY, 160, 90);
+
+                ctx.fillStyle = '#9CE500';
+                ctx.font = 'bold 16px Courier New';
+                ctx.textAlign = 'left';
+                ctx.fillText('Investment Safe', tooltipX + 10, tooltipY + 25);
+                ctx.fillStyle = '#FFB6C1';
+                ctx.font = '13px Courier New';
+                ctx.fillText('Earn 1.5x return', tooltipX + 10, tooltipY + 48);
+                ctx.fillText('in next shop!', tooltipX + 10, tooltipY + 65);
+                ctx.fillStyle = '#FFD700';
+                ctx.font = 'bold 12px Courier New';
+                ctx.fillText('Click to invest', tooltipX + 10, tooltipY + 82);
+            }
+
+            ctx.shadowBlur = 0;
         }
 
         // Draw weapon on counter (using exact game models)
@@ -2627,6 +3181,70 @@
                 ctx.fillStyle = '#4A4A4A';
                 ctx.fillRect(8, 3, 2, 6);
                 ctx.fillRect(13, 3, 2, 6);
+            } else if (weaponId === 'ak47') {
+                // AK-47 - realistic iconic design (centered for shop display)
+                // Wooden stock
+                ctx.fillStyle = '#654321';
+                ctx.fillRect(-18, -1, 10, 5); // Stock base
+
+                // Main receiver/body
+                ctx.fillStyle = '#1C1C1C';
+                ctx.fillRect(-11, -4, 24, 8); // Main receiver
+
+                // Dust cover (top)
+                ctx.fillStyle = '#2C2C2C';
+                ctx.fillRect(-9, -5, 20, 2); // Dust cover
+
+                // Rear sight
+                ctx.fillStyle = '#4A4A4A';
+                ctx.fillRect(-1, -7, 3, 3); // Rear sight
+
+                // Barrel
+                ctx.fillStyle = '#2F4F4F';
+                ctx.fillRect(11, -2, 16, 4); // Barrel
+
+                // Gas tube
+                ctx.fillStyle = '#3A3A3A';
+                ctx.fillRect(11, -4, 14, 2); // Gas tube
+
+                // Wooden handguard
+                ctx.fillStyle = '#8B4513';
+                ctx.fillRect(11, 2, 10, 2); // Lower handguard
+
+                // Front sight block
+                ctx.fillStyle = '#1C1C1C';
+                ctx.fillRect(23, -4, 2, 6); // Front sight block
+                ctx.fillStyle = '#4A4A4A';
+                ctx.fillRect(23, -4, 2, 2); // Sight post
+
+                // Slant muzzle brake
+                ctx.fillStyle = '#2F4F4F';
+                ctx.fillRect(25, -3, 2, 5); // Muzzle brake
+                ctx.fillRect(26, -2, 2, 3); // Brake cut
+
+                // Curved magazine (iconic)
+                ctx.fillStyle = '#4A4A4A';
+                ctx.fillRect(-2, 4, 7, 3); // Top of mag
+                ctx.fillRect(-1, 7, 6, 8); // Curved body
+                ctx.fillRect(0, 15, 4, 2); // Bottom curve
+
+                // Magazine lips (brass)
+                ctx.fillStyle = '#B8860B';
+                ctx.fillRect(-1, 4, 5, 1); // Brass showing
+
+                // Pistol grip
+                ctx.fillStyle = '#654321';
+                ctx.fillRect(-8, 4, 4, 6); // Grip
+                ctx.fillRect(-9, 10, 5, 3); // Grip bottom
+
+                // Trigger guard
+                ctx.fillStyle = '#2F4F4F';
+                ctx.fillRect(-4, 3, 4, 1); // Guard top
+                ctx.fillRect(-4, 7, 4, 1); // Guard bottom
+
+                // Selector switch (red)
+                ctx.fillStyle = '#8B0000';
+                ctx.fillRect(-10, 0, 2, 3); // Selector lever
             }
 
             ctx.shadowBlur = 0;
@@ -2703,40 +3321,53 @@
                 ctx.shadowBlur = 15;
             }
 
-            // Center the first aid kit in the bounding box
+            // Center the heart in the bounding box
             const centerX = x + width / 2;
             const centerY = y + height / 2;
 
             ctx.translate(centerX, centerY);
 
-            // First aid kit box (white with red cross)
-            // Main box body (white)
-            ctx.fillStyle = '#FFFFFF';
-            ctx.fillRect(-18, -12, 36, 28);
+            // Pixel-art heart - drawing pixel by pixel
+            const pixelSize = 4; // Size of each pixel
 
-            // Box border (red outline)
-            ctx.strokeStyle = '#DC143C';
-            ctx.lineWidth = 3;
-            ctx.strokeRect(-18, -12, 36, 28);
+            // Heart pattern (8x7 pixels)
+            const heartPattern = [
+                [0,1,1,0,0,1,1,0],
+                [1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1],
+                [0,1,1,1,1,1,1,0],
+                [0,0,1,1,1,1,0,0],
+                [0,0,0,1,1,0,0,0]
+            ];
 
-            // Handle on top (gray)
-            ctx.fillStyle = '#808080';
-            ctx.fillRect(-10, -16, 20, 5);
-            ctx.strokeStyle = '#606060';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(-10, -16, 20, 5);
+            // Draw heart with gradient effect
+            for (let row = 0; row < heartPattern.length; row++) {
+                for (let col = 0; col < heartPattern[row].length; col++) {
+                    if (heartPattern[row][col] === 1) {
+                        // Main red color
+                        ctx.fillStyle = '#FF0000';
+                        ctx.fillRect(
+                            (col - 4) * pixelSize,
+                            (row - 3.5) * pixelSize,
+                            pixelSize,
+                            pixelSize
+                        );
+                    }
+                }
+            }
 
-            // Large red cross symbol (centered)
-            ctx.fillStyle = '#DC143C';
-            // Vertical bar of cross
-            ctx.fillRect(-4, -8, 8, 20);
-            // Horizontal bar of cross
-            ctx.fillRect(-12, -2, 24, 8);
-
-            // Small white highlights on cross for depth
+            // Add highlights for depth (lighter pixels on top-left)
             ctx.fillStyle = '#FF6B6B';
-            ctx.fillRect(-2, -6, 4, 4);
-            ctx.fillRect(-2, 0, 4, 4);
+            ctx.fillRect(-1 * pixelSize, -2 * pixelSize, pixelSize, pixelSize);
+            ctx.fillRect(0, -2 * pixelSize, pixelSize, pixelSize);
+            ctx.fillRect(2 * pixelSize, -2 * pixelSize, pixelSize, pixelSize);
+
+            // Add darker pixels for depth (bottom-right)
+            ctx.fillStyle = '#CC0000';
+            ctx.fillRect(-1 * pixelSize, 2 * pixelSize, pixelSize, pixelSize);
+            ctx.fillRect(0, 2 * pixelSize, pixelSize, pixelSize);
+            ctx.fillRect(1 * pixelSize, 2 * pixelSize, pixelSize, pixelSize);
 
             ctx.shadowBlur = 0;
             ctx.restore();
@@ -2806,7 +3437,7 @@
                 ctx.fillText(`Current: ${game.health}/${game.maxHealth}`, tooltipX + 10, yOffset);
                 yOffset += 18;
                 ctx.fillStyle = game.health >= game.maxHealth ? '#FF0000' : '#FFD700';
-                ctx.fillText(game.health >= game.maxHealth ? 'MAX HEALTH' : 'Price: $50', tooltipX + 10, yOffset);
+                ctx.fillText(game.health >= game.maxHealth ? 'MAX HEALTH' : 'Price: $100', tooltipX + 10, yOffset);
             }
         }
 
@@ -2818,19 +3449,21 @@
             if (shootCooldown <= 0 && !game.isReloading && !game.isPumping && game.currentAmmo > 0) {
                 const bulletY = player.isCrouching ? player.y + 35 : player.y + 30;
 
-                // Shoot based on weapon type
+                // Shoot based on weapon type - OPTIMIZED WITH POOLING
                 for (let i = 0; i < weapon.bulletCount; i++) {
                     const spreadAngle = (Math.random() - 0.5) * weapon.spread;
 
-                    bullets.push({
-                        x: player.x + 70,
-                        y: bulletY + spreadAngle,
-                        width: game.weapon === 'shotgun' ? 6 : (game.weapon === 'colt' ? 8 : 10),
-                        height: 3,
-                        speed: weapon.bulletSpeed,
-                        damage: weapon.damage,
-                        angle: spreadAngle * 0.05
-                    });
+                    // Get bullet from pool
+                    const bullet = getFromPool('bullets');
+                    bullet.x = player.x + 70;
+                    bullet.y = bulletY + spreadAngle;
+                    bullet.width = game.weapon === 'shotgun' ? 6 : (game.weapon === 'colt' ? 8 : 10);
+                    bullet.height = 3;
+                    bullet.speed = weapon.bulletSpeed;
+                    bullet.damage = weapon.damage;
+                    bullet.angle = spreadAngle * 0.05;
+
+                    bullets.push(bullet);
                 }
 
                 game.currentAmmo--;
@@ -2964,20 +3597,21 @@
                 player.isJumping = false;
             }
 
-            // Update bullets
+            // Update bullets - OPTIMIZED WITH POOLING
             for (let i = bullets.length - 1; i >= 0; i--) {
                 bullets[i].x += bullets[i].speed;
                 bullets[i].y += bullets[i].angle * bullets[i].speed;
 
                 if (bullets[i].x > canvas.width) {
+                    returnToPool('bullets', bullets[i]);
                     bullets.splice(i, 1);
                 }
             }
 
-            // Update enemies
+            // Update enemies - OPTIMIZED
             for (let i = enemies.length - 1; i >= 0; i--) {
                 // Helicopter-specific logic
-                if (enemies[i].type === 'helicopter') {
+                if (enemies[i].type === 'helicopter' || enemies[i].type === 'red_helicopter') {
                     // Move helicopter to target position (right side of screen)
                     if (enemies[i].x > enemies[i].targetX) {
                         enemies[i].x -= 3; // Move to position
@@ -3008,56 +3642,64 @@
                     enemies[i].x -= enemies[i].speed + game.speed;
                 }
 
-                // Check bullet collision
-                for (let j = bullets.length - 1; j >= 0; j--) {
+                // OPTIMIZATION: Only check collisions if enemy is on screen or near it
+                const isNearScreen = enemies[i].x < canvas.width + 100 && enemies[i].x > -100;
+
+                if (isNearScreen) {
+                    // Check bullet collision
+                    for (let j = bullets.length - 1; j >= 0; j--) {
                     if (bullets[j].x < enemies[i].x + enemies[i].width &&
                         bullets[j].x + bullets[j].width > enemies[i].x &&
                         bullets[j].y < enemies[i].y + enemies[i].height &&
                         bullets[j].y + bullets[j].height > enemies[i].y) {
 
                         enemies[i].health -= bullets[j].damage;
+                        returnToPool('bullets', bullets[j]);
                         bullets.splice(j, 1);
 
                         if (enemies[i].health <= 0) {
                             game.score += 10;
-                            game.money += 5;
+                            game.money += 6; // Increased reward from 5 to 6
                             game.kills++; // Increment kill counter
 
                             // If helicopter is killed, reset flag
-                            if (enemies[i].type === 'helicopter') {
+                            if (enemies[i].type === 'helicopter' || enemies[i].type === 'red_helicopter') {
                                 game.helicopterActive = false;
                             }
 
+                            returnToPool('enemies', enemies[i]);
                             enemies.splice(i, 1);
                             break;
                         }
                     }
                 }
 
-                // Check player collision (adjusted for bigger werewolves)
-                if (i >= 0 && enemies[i]) {
-                    const playerHeight = player.isCrouching ? 50 : 62;
-                    const playerY = player.isCrouching ? player.y + 15 : player.y;
+                    // Check player collision (adjusted for bigger werewolves)
+                    if (i >= 0 && enemies[i]) {
+                        const playerHeight = player.isCrouching ? 50 : 62;
+                        const playerY = player.isCrouching ? player.y + 15 : player.y;
 
-                    if (enemies[i].x < player.x + 50 &&
-                        enemies[i].x + 50 > player.x &&
-                        enemies[i].y < playerY + playerHeight &&
-                        enemies[i].y + 90 > playerY) {
+                        if (enemies[i].x < player.x + 50 &&
+                            enemies[i].x + 50 > player.x &&
+                            enemies[i].y < playerY + playerHeight &&
+                            enemies[i].y + 90 > playerY) {
 
-                        // Check armor first
-                        if (game.armor > 0) {
-                            game.armor--;
-                        } else {
-                            game.health--;
-                        }
+                            // Check armor first
+                            if (game.armor > 0) {
+                                game.armor--;
+                            } else {
+                                game.health--;
+                            }
 
-                        enemies.splice(i, 1);
+                            returnToPool('enemies', enemies[i]);
+                            enemies.splice(i, 1);
 
-                        if (game.health <= 0) {
-                            gameOver();
+                            if (game.health <= 0) {
+                                gameOver();
+                            }
                         }
                     }
-                }
+                } // End of isNearScreen check
 
                 // Remove off-screen enemies
                 if (i >= 0 && enemies[i] && enemies[i].x < -enemies[i].width) {
@@ -3065,6 +3707,7 @@
                     if (enemies[i].type === 'helicopter') {
                         game.helicopterActive = false;
                     }
+                    returnToPool('enemies', enemies[i]);
                     enemies.splice(i, 1);
                     game.score += 1;
                 }
@@ -3080,20 +3723,23 @@
                 const playerBottom = playerY + playerHeight;
                 const playerRight = player.x + 45;
 
+                // For car obstacle, the roof starts at carY + 20, not carY
+                const obstacleTop = obstacles[i].type === 'car' ? obstacles[i].y + 20 : obstacles[i].y;
+
                 // Check if there's any overlap
                 const isOverlapping = obstacles[i].x < playerRight &&
                     obstacles[i].x + obstacles[i].width > player.x &&
-                    obstacles[i].y < playerBottom &&
+                    obstacleTop < playerBottom &&
                     obstacles[i].y + obstacles[i].height > playerY;
 
                 if (isOverlapping) {
                     // Check if player is coming from above (landing on top)
                     const isLandingOnTop = player.velocityY > 0 && // Falling down (must be positive velocity)
-                        playerBottom - player.velocityY <= obstacles[i].y + 5; // Was above obstacle in previous frame
+                        playerBottom - player.velocityY <= obstacleTop + 5; // Was above obstacle in previous frame
 
                     if (isLandingOnTop) {
                         // Landing on top - NO DAMAGE, can stand on it
-                        player.y = obstacles[i].y - playerHeight + (player.isCrouching ? 15 : 0);
+                        player.y = obstacleTop - playerHeight + (player.isCrouching ? 15 : 0);
                         player.velocityY = 0;
                         player.isJumping = false;
                     } else {
@@ -3112,7 +3758,7 @@
                     }
                 } else if (obstacles[i].x < -obstacles[i].width) {
                     obstacles.splice(i, 1);
-                    game.score += 2;
+                    game.score += 4;
                 }
             }
 
@@ -3158,6 +3804,9 @@
                         barrel.exploding = true;
                         barrel.explosionTimer = 30;
 
+                        // Play explosion sound
+                        playExplosionSound();
+
                         // Damage player
                         if (game.armor > 0) {
                             game.armor--;
@@ -3177,48 +3826,81 @@
                 }
             }
 
-            // Spawn enemies and obstacles (10% less enemies)
-            if (game.frameCount % 200 === 0) {
+            // Spawn enemies and obstacles (10% less enemies, 10% more after 3000 score)
+            const enemySpawnRate = game.score >= 3000 ? 182 : 200; // 10% faster spawn after 3000 points
+            if (game.frameCount % enemySpawnRate === 0) {
                 spawnEnemy();
             }
 
             // Reduced obstacle frequency (from 200 to 300 frames)
             if (game.frameCount % 300 === 0) {
-                // Fewer obstacles - mostly single, sometimes double
-                const obstacleCount = Math.random() > 0.8 ? 2 : 1;
+                // Obstacle spawning logic:
+                // 2% chance for double obstacles (reduced from 20%)
+                // 14.4% chance for car (reduced by 20% from 18%)
+                // 83.6% chance for single obstacle
+                const rand = Math.random();
+                let obstacleCount = 1;
+                let spawnCar = false;
 
-                for (let i = 0; i < obstacleCount; i++) {
-                    const obstacle = spawnObstacle();
-                    if (obstacle) {
-                        obstacle.x += i * 100; // More spacing between obstacles
+                if (rand > 0.98) {
+                    // 2% chance for double obstacles
+                    obstacleCount = 2;
+                } else if (rand > 0.856) {
+                    // 14.4% chance for car (18% - 20% = 14.4%)
+                    spawnCar = true;
+                }
+
+                if (spawnCar) {
+                    // Spawn car obstacle
+                    const carObstacle = spawnCarObstacle();
+                } else {
+                    // Spawn regular obstacles
+                    for (let i = 0; i < obstacleCount; i++) {
+                        const obstacle = spawnObstacle();
+                        if (obstacle) {
+                            obstacle.x += i * 100; // More spacing between obstacles
+                        }
                     }
                 }
             }
 
-            // Spawn piggy bank building at random intervals
+            // Spawn piggy bank building at random intervals within each 500-point cycle
             const currentCycle = Math.floor(game.score / 500);
             const scoreInCycle = game.score % 500;
 
+            // Check if we entered a new cycle
+            if (currentCycle !== game.lastPiggyBankCycle) {
+                game.lastPiggyBankCycle = currentCycle;
+                game.piggyBankSpawned = false;
+                // Generate random spawn point within this 500-point cycle (50-450 to avoid edges)
+                game.nextPiggyBank = 50 + Math.random() * 400; // Random between 50 and 450
+            }
+
+            // Spawn piggy bank at the random point in current cycle
             if (!game.piggyBankSpawned && scoreInCycle >= game.nextPiggyBank) {
                 piggyBanks.push({
                     x: canvas.width,
-                    y: 300,  // Higher up
-                    width: 720,  // 6x wider (120 * 6)
-                    height: 200, // Much taller
-                    broken: false
+                    y: 500 - 150,  // Ground level minus building height (increased from 120 to 150)
+                    width: 520,    // Increased from 400 to 520 (1.3x)
+                    height: 150,   // Increased from 120 to 150
+                    broken: false,
+                    trashCanX: canvas.width - 80 // Trash can position (left of building)
                 });
                 game.piggyBankSpawned = true;
             }
 
-            // Reset piggy bank spawn for next cycle
-            if (scoreInCycle === 0 && game.piggyBankSpawned) {
-                game.piggyBankSpawned = false;
-                game.nextPiggyBank = Math.random() * 500;
-            }
+            // Helicopter spawn logic:
+            // - Normal helicopters: spawn every 500 points until 2000 score
+            // - Red helicopters: spawn at 2000, then every 700 points after (2700, 3400, 4100...)
 
-            // Spawn helicopter every 500 points (100% chance)
-            if (game.score >= game.nextHelicopterScore && !game.helicopterActive) {
-                spawnHelicopter();
+            // Red helicopter spawns starting from 2000, then every 700 points
+            if (game.score >= game.nextRedHelicopterScore && !game.helicopterActive) {
+                spawnHelicopter(true); // Spawn red helicopter
+                game.nextRedHelicopterScore += 700; // Next red helicopter in 700 points
+            }
+            // Normal helicopter spawns every 500 points, but only until score reaches 2000
+            else if (game.score >= game.nextHelicopterScore && game.score < 2000 && !game.helicopterActive) {
+                spawnHelicopter(false);
                 game.nextHelicopterScore += 500;
             }
 
@@ -3226,9 +3908,9 @@
             if (game.score >= game.nextStreetLampScore) {
                 streetLamps.push({
                     x: canvas.width,
-                    y: 290, // Position on ground (500 - 210 for lamp height)
-                    width: 35, // Width for hitbox (slightly wider)
-                    height: 210 // Total height of lamp (2x taller: 105 * 2)
+                    y: 227, // Position on ground (500 - 273 for lamp height with base)
+                    width: 45, // Width for hitbox (scaled 1.3x from 35)
+                    height: 273 // Total height of lamp (2.6x taller: 105 * 2.6)
                 });
                 game.nextStreetLampScore += 100;
             }
@@ -3255,44 +3937,66 @@
             for (let i = piggyBanks.length - 1; i >= 0; i--) {
                 piggyBanks[i].x -= game.speed;
 
+                // Check bullet collision with piggy bank (only if not broken)
                 if (!piggyBanks[i].broken) {
-                    // Check bullet collision with piggy bank (adjusted for MASSIVE size and centered position)
                     for (let j = bullets.length - 1; j >= 0; j--) {
-                        const platformY = piggyBanks[i].y - 15;
-                        const pigX = piggyBanks[i].x + piggyBanks[i].width/2 - 50; // Centered
-                        const pigY = platformY - 55;
+                        const platformY = piggyBanks[i].y - 12;
+                        const pigX = piggyBanks[i].x + piggyBanks[i].width - 120; // Right side of building
+                        const pigY = platformY - 85; // Raised to match visual position
 
-                        // Much larger hitbox for piggy bank
+                        // Hitbox for piggy bank (larger, easier to hit)
                         if (bullets[j].x >= pigX &&
                             bullets[j].x <= pigX + 100 &&
                             bullets[j].y >= pigY &&
-                            bullets[j].y <= pigY + 76) {
+                            bullets[j].y <= pigY + 80) {
 
                             // Break piggy bank!
                             piggyBanks[i].broken = true;
                             game.money += 100;
+                            returnToPool('bullets', bullets[j]);
                             bullets.splice(j, 1);
                             break;
                         }
                     }
+                }
 
-                    // Check if player lands on the platform (FULL WIDTH platform on top of building)
-                    const playerBottom = player.isCrouching ? player.y + 65 : player.y + 62;
-                    const platformY = piggyBanks[i].y - 15; // Platform is 15px above building
-                    const platformX = piggyBanks[i].x; // Full width
-                    const platformWidth = piggyBanks[i].width; // ENTIRE BUILDING WIDTH
+                // Platform collision - ALWAYS works, even if piggy bank is broken
+                const playerBottom = player.isCrouching ? player.y + 65 : player.y + 62;
+                const platformY = piggyBanks[i].y - 12; // Platform is 12px above building
+                const platformX = piggyBanks[i].x - 40; // Extended 40px to the left
+                const platformWidth = piggyBanks[i].width + 80; // Extended 40px on each side
 
-                    if (player.x + 50 > platformX &&
-                        player.x < platformX + platformWidth &&
-                        playerBottom >= platformY &&
-                        playerBottom <= platformY + 15 &&
-                        player.velocityY > 0) {
+                // Check horizontal overlap
+                const isOverPlatform = player.x + 50 > platformX && player.x < platformX + platformWidth;
 
-                        // Can stand on platform
-                        player.y = platformY - 62 + (player.isCrouching ? 15 : 0);
-                        player.velocityY = 0;
-                        player.isJumping = false;
-                    }
+                // Check if landing from above (was above platform in previous frame)
+                const wasAbovePlatform = playerBottom - player.velocityY <= platformY;
+                const isAtPlatformLevel = playerBottom >= platformY && playerBottom <= platformY + 15;
+
+                if (isOverPlatform && isAtPlatformLevel && player.velocityY > 0 && wasAbovePlatform) {
+                    // Can stand on platform (roof)
+                    player.y = platformY - 62 + (player.isCrouching ? 15 : 0);
+                    player.velocityY = 0;
+                    player.isJumping = false;
+                }
+
+                // Trash can collision - ALWAYS works
+                const trashCanX = piggyBanks[i].x - 150;
+                const trashCanY = 500 - 55;
+                const trashCanWidth = 50;
+                const trashCanHeight = 55;
+                const trashCanTop = trashCanY - 8; // Including lid
+
+                if (player.x + 50 > trashCanX &&
+                    player.x < trashCanX + trashCanWidth &&
+                    playerBottom >= trashCanTop &&
+                    playerBottom <= trashCanTop + 10 &&
+                    player.velocityY > 0) {
+
+                    // Can stand on trash can lid
+                    player.y = trashCanTop - 62 + (player.isCrouching ? 15 : 0);
+                    player.velocityY = 0;
+                    player.isJumping = false;
                 }
 
                 // Remove off-screen piggy banks
@@ -3382,35 +4086,44 @@
             // Draw dropped barrels
             droppedBarrels.forEach(barrel => {
                 if (barrel.exploding) {
-                    // Explosion animation
+                    // Explosion animation (bigger and more dramatic)
                     const explosionProgress = 1 - (barrel.explosionTimer / 30);
-                    const explosionSize = 40 * explosionProgress;
+                    const explosionSize = 80 * explosionProgress; // Increased from 40 to 80 (2x bigger)
+
+                    // Red outer explosion (new layer)
+                    ctx.fillStyle = `rgba(255, 69, 0, ${0.7 * (1 - explosionProgress)})`;
+                    ctx.fillRect(
+                        barrel.x - explosionSize,
+                        barrel.y - explosionSize,
+                        barrel.width + explosionSize * 2,
+                        barrel.height + explosionSize * 2
+                    );
 
                     // Orange explosion
                     ctx.fillStyle = `rgba(255, 140, 0, ${1 - explosionProgress})`;
                     ctx.fillRect(
-                        barrel.x - explosionSize / 2,
-                        barrel.y - explosionSize / 2,
-                        barrel.width + explosionSize,
-                        barrel.height + explosionSize
+                        barrel.x - explosionSize * 0.7,
+                        barrel.y - explosionSize * 0.7,
+                        barrel.width + explosionSize * 1.4,
+                        barrel.height + explosionSize * 1.4
                     );
 
                     // Yellow inner explosion
                     ctx.fillStyle = `rgba(255, 215, 0, ${1 - explosionProgress})`;
                     ctx.fillRect(
-                        barrel.x - explosionSize / 4,
-                        barrel.y - explosionSize / 4,
-                        barrel.width + explosionSize / 2,
-                        barrel.height + explosionSize / 2
+                        barrel.x - explosionSize * 0.4,
+                        barrel.y - explosionSize * 0.4,
+                        barrel.width + explosionSize * 0.8,
+                        barrel.height + explosionSize * 0.8
                     );
 
-                    // White core
+                    // White core (bigger)
                     ctx.fillStyle = `rgba(255, 255, 255, ${1 - explosionProgress})`;
                     ctx.fillRect(
-                        barrel.x + barrel.width / 4,
-                        barrel.y + barrel.height / 4,
-                        barrel.width / 2,
-                        barrel.height / 2
+                        barrel.x + barrel.width * 0.15,
+                        barrel.y + barrel.height * 0.15,
+                        barrel.width * 0.7,
+                        barrel.height * 0.7
                     );
                 } else {
                     // Draw falling barrel (explosive, red)
@@ -3429,143 +4142,192 @@
                 }
             });
 
-            // Draw piggy banks (buildings are now in background, only platform and pig are interactive)
+            // Draw piggy banks (medium-sized building with platform on top)
             piggyBanks.forEach(bank => {
-                // Draw building in background (semi-transparent, passable) - HUGE, DARK GRAY COLORS
-                ctx.globalAlpha = 0.5;
+                // Draw trash can (left of building for easy access)
+                const trashCanX = bank.x - 150;
+                const trashCanY = 500 - 55; // Ground level minus trash can height
+                const trashCanWidth = 50;
+                const trashCanHeight = 55;
 
-                // Main building body (dark gray)
-                ctx.fillStyle = '#3A3A3A'; // Dark gray
+                // Main trash can body (dark gray)
+                ctx.fillStyle = '#3A3A3A';
+                ctx.fillRect(trashCanX, trashCanY, trashCanWidth, trashCanHeight);
+
+                // Trash can lid (lighter gray)
+                ctx.fillStyle = '#5A5A5A';
+                ctx.fillRect(trashCanX - 5, trashCanY - 8, trashCanWidth + 10, 10);
+
+                // Lid handle
+                ctx.fillStyle = '#4A4A4A';
+                ctx.fillRect(trashCanX + trashCanWidth/2 - 8, trashCanY - 12, 16, 6);
+
+                // Trash can stripes (darker)
+                ctx.fillStyle = '#2A2A2A';
+                ctx.fillRect(trashCanX, trashCanY + 15, trashCanWidth, 4);
+                ctx.fillRect(trashCanX, trashCanY + 35, trashCanWidth, 4);
+
+                // Trash can border
+                ctx.strokeStyle = '#2A2A2A';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(trashCanX, trashCanY, trashCanWidth, trashCanHeight);
+
+                // Jump indicator arrow above trash can
+                ctx.fillStyle = '#FFD700';
+                ctx.font = 'bold 32px Courier New';
+                ctx.fillText('↑', trashCanX + trashCanWidth/2 - 10, trashCanY - 20);
+
+                // Pulsing glow effect for jump indicator
+                const pulseAlpha = 0.3 + Math.sin(game.frameCount * 0.1) * 0.2;
+                ctx.globalAlpha = pulseAlpha;
+                ctx.fillStyle = '#FFD700';
+                ctx.fillRect(trashCanX - 5, trashCanY - 5, trashCanWidth + 10, trashCanHeight + 10);
+                ctx.globalAlpha = 1.0;
+
+                // Draw building - solid, opaque
+                ctx.globalAlpha = 1.0;
+
+                // Main building body (dark gray/charcoal)
+                ctx.fillStyle = '#3A3A3A'; // Dark charcoal gray
                 ctx.fillRect(bank.x, bank.y, bank.width, bank.height);
 
-                // Building sections/pillars (more pillars for massive building)
-                ctx.fillStyle = '#4A4A4A'; // Slightly lighter gray for pillars
-                ctx.fillRect(bank.x, bank.y, 20, bank.height);
-                ctx.fillRect(bank.x + bank.width/4 - 10, bank.y, 20, bank.height);
-                ctx.fillRect(bank.x + bank.width/2 - 10, bank.y, 20, bank.height);
-                ctx.fillRect(bank.x + 3*bank.width/4 - 10, bank.y, 20, bank.height);
-                ctx.fillRect(bank.x + bank.width - 20, bank.y, 20, bank.height);
+                // Building pillars/edges (darker gray)
+                ctx.fillStyle = '#2A2A2A'; // Very dark gray for pillars
+                ctx.fillRect(bank.x, bank.y, 15, bank.height);
+                ctx.fillRect(bank.x + bank.width - 15, bank.y, 15, bank.height);
 
-                // Door sections (5 doors for massive building)
-                ctx.fillStyle = '#2A2A2A'; // Very dark gray for doors
-                const doorWidth = 50;
-                const doorHeight = 70;
-                for (let i = 0; i < 5; i++) {
-                    const doorX = bank.x + 60 + i * (bank.width - 120) / 4;
-                    ctx.fillRect(doorX, bank.y + bank.height - doorHeight, doorWidth, doorHeight);
-                }
+                // Door
+                ctx.fillStyle = '#1A1A1A'; // Almost black for door
+                const doorWidth = 40;
+                const doorHeight = 60;
+                const doorX = bank.x + bank.width/2 - doorWidth/2;
+                ctx.fillRect(doorX, bank.y + bank.height - doorHeight, doorWidth, doorHeight);
 
-                // Roof detail (dark gray, bigger)
+                // Door frame
+                ctx.strokeStyle = '#2A2A2A';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(doorX, bank.y + bank.height - doorHeight, doorWidth, doorHeight);
+
+                // Roof detail
                 ctx.fillStyle = '#2A2A2A';
-                ctx.fillRect(bank.x - 10, bank.y - 10, bank.width + 20, 20);
+                ctx.fillRect(bank.x - 10, bank.y - 10, bank.width + 20, 15);
 
-                // Windows - MANY windows for massive building (golden glow)
+                // Windows (golden glow, 2 rows)
                 ctx.fillStyle = '#FFD700';
-                const windowSize = 18;
-                const windowSpacing = 35;
-                const windowsPerRow = Math.floor((bank.width - 40) / windowSpacing);
+                const windowSize = 14;
+                const windowSpacing = 50;
+                const windowsPerRow = Math.floor((bank.width - 60) / windowSpacing);
 
-                // Multiple rows of windows (5 rows for taller building)
-                for (let row = 0; row < 5; row++) {
+                for (let row = 0; row < 2; row++) {
                     for (let col = 0; col < windowsPerRow; col++) {
-                        const wx = bank.x + 25 + col * windowSpacing;
-                        const wy = bank.y + 30 + row * 35;
+                        const wx = bank.x + 40 + col * windowSpacing;
+                        const wy = bank.y + 20 + row * 35;
 
-                        // Skip windows where doors are (only bottom 2 rows)
-                        if (row < 3) {
+                        // Don't draw window over door
+                        if (!(row === 1 && wx > doorX - 20 && wx < doorX + doorWidth + 20)) {
                             ctx.fillRect(wx, wy, windowSize, windowSize);
-                        } else {
-                            // Check if not in door area
-                            let isInDoorArea = false;
-                            for (let i = 0; i < 5; i++) {
-                                const doorX = bank.x + 60 + i * (bank.width - 120) / 4;
-                                if (wx > doorX - 10 && wx < doorX + doorWidth + 10) {
-                                    isInDoorArea = true;
-                                    break;
-                                }
-                            }
-                            if (!isInDoorArea) {
-                                ctx.fillRect(wx, wy, windowSize, windowSize);
-                            }
+                            // Window panes
+                            ctx.strokeStyle = '#DAA520';
+                            ctx.lineWidth = 2;
+                            ctx.strokeRect(wx, wy, windowSize, windowSize);
                         }
                     }
                 }
 
-                // Bank sign (bigger and more prominent)
+                // Bank sign
                 ctx.fillStyle = '#FFD700';
-                ctx.font = 'bold 32px Courier New';
-                ctx.fillText('PIGGY BANK', bank.x + bank.width/2 - 95, bank.y + 25);
+                ctx.font = 'bold 24px Courier New';
+                ctx.fillText('BANK', bank.x + bank.width/2 - 35, bank.y + 15);
 
                 ctx.globalAlpha = 1.0;
 
-                // Draw platform on top (solid, can stand on it) - FULL WIDTH OF BUILDING
-                const platformY = bank.y - 15;
-                const platformX = bank.x;
-                const platformWidth = bank.width; // ENTIRE BUILDING WIDTH
+                // Draw platform on top (solid, can stand on it) - extends beyond building edges
+                const platformY = bank.y - 12;
+                const platformX = bank.x - 40; // Extend 40px to the left
+                const platformWidth = bank.width + 80; // Extend 40px on each side
 
-                ctx.fillStyle = '#3A3A3A'; // Dark gray platform to match building
-                ctx.fillRect(platformX, platformY, platformWidth, 15);
-                ctx.strokeStyle = '#2A2A2A';
-                ctx.lineWidth = 4;
-                ctx.strokeRect(platformX, platformY, platformWidth, 15);
+                ctx.fillStyle = '#2A2A2A'; // Dark gray platform to match building
+                ctx.fillRect(platformX, platformY, platformWidth, 12);
+                ctx.strokeStyle = '#1A1A1A';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(platformX, platformY, platformWidth, 12);
 
-                // Platform edge details (railings)
-                ctx.fillStyle = '#4A4A4A';
-                for (let i = 0; i < platformWidth; i += 40) {
-                    ctx.fillRect(platformX + i, platformY, 5, 15);
+                // Platform edge details
+                ctx.fillStyle = '#3A3A3A';
+                for (let i = 0; i < platformWidth; i += 30) {
+                    ctx.fillRect(platformX + i, platformY, 4, 12);
                 }
 
+                // Railings on platform edges (left and right)
+                ctx.fillStyle = '#4A4A4A';
+                ctx.lineWidth = 3;
+
+                // Left railing
+                ctx.fillRect(platformX, platformY - 25, 4, 25); // Vertical post
+                ctx.fillRect(platformX, platformY - 25, 30, 4); // Horizontal rail
+
+                // Right railing
+                ctx.fillRect(platformX + platformWidth - 4, platformY - 25, 4, 25); // Vertical post
+                ctx.fillRect(platformX + platformWidth - 30, platformY - 25, 30, 4); // Horizontal rail
+
+                // Platform surface highlight (makes it more visible)
+                ctx.fillStyle = '#4A4A4A';
+                ctx.fillRect(platformX, platformY, platformWidth, 3);
+
                 if (!bank.broken) {
-                    // Piggy bank on platform - MUCH BIGGER
-                    const pigX = bank.x + bank.width/2 - 50; // Centered
-                    const pigY = platformY - 55;
+                    // Piggy bank on platform - increased 1.5x, lowered for easier shooting
+                    const pigX = bank.x + bank.width - 120; // Right side of building (adjusted for larger size)
+                    const pigY = platformY - 85; // Raised higher on platform
 
-                    // Body (much bigger)
+                    // Body (50x30 -> 75x45)
                     ctx.fillStyle = '#FFB6C1';
-                    ctx.fillRect(pigX, pigY + 20, 70, 45);
+                    ctx.fillRect(pigX, pigY + 22, 75, 45);
 
-                    // Head (much bigger)
-                    ctx.fillRect(pigX + 50, pigY + 10, 35, 35);
+                    // Head (25x25 -> 37x37)
+                    ctx.fillRect(pigX + 52, pigY + 12, 37, 37);
 
-                    // Snout (much bigger)
+                    // Snout (10x10 -> 15x15)
                     ctx.fillStyle = '#FF69B4';
-                    ctx.fillRect(pigX + 78, pigY + 22, 14, 14);
+                    ctx.fillRect(pigX + 82, pigY + 24, 15, 15);
 
-                    // Coin slot (much bigger)
+                    // Coin slot (20x4 -> 30x6)
                     ctx.fillStyle = '#FFD700';
-                    ctx.fillRect(pigX + 25, pigY + 15, 28, 6);
+                    ctx.fillRect(pigX + 27, pigY + 18, 30, 6);
 
-                    // Legs (much bigger)
+                    // Legs (10x10 -> 15x15)
                     ctx.fillStyle = '#FFB6C1';
-                    ctx.fillRect(pigX + 12, pigY + 62, 14, 14);
-                    ctx.fillRect(pigX + 35, pigY + 62, 14, 14);
-                    ctx.fillRect(pigX + 58, pigY + 62, 14, 14);
+                    ctx.fillRect(pigX + 12, pigY + 63, 15, 15);
+                    ctx.fillRect(pigX + 37, pigY + 63, 15, 15);
+                    ctx.fillRect(pigX + 63, pigY + 63, 15, 15);
 
-                    // $ symbol (much bigger and more prominent)
+                    // $ symbol (increased font size)
                     ctx.fillStyle = '#FFD700';
-                    ctx.font = 'bold 32px Courier New';
-                    ctx.fillText('$100', pigX + 12, pigY + 50);
+                    ctx.font = 'bold 33px Courier New';
+                    ctx.fillText('$100', pigX + 12, pigY + 52);
 
-                    // Glow effect around piggy bank
+                    // Glow effect around piggy bank (70x55 -> 105x82)
                     ctx.globalAlpha = 0.3;
                     ctx.fillStyle = '#FFD700';
-                    ctx.fillRect(pigX - 5, pigY + 5, 100, 80);
+                    ctx.fillRect(pigX - 7, pigY + 7, 105, 82);
                     ctx.globalAlpha = 1.0;
                 } else {
-                    // Broken piggy bank pieces (much bigger)
-                    const pigX = bank.x + bank.width/2 - 50;
-                    const pigY = platformY - 55;
+                    // Broken piggy bank pieces (1.5x larger)
+                    const pigX = bank.x + bank.width - 120; // Right side of building (same as intact)
+                    const pigY = platformY - 85; // Raised to match intact piggy bank position
 
                     ctx.fillStyle = '#FFB6C1';
-                    ctx.fillRect(pigX + 14, pigY + 35, 25, 20);
-                    ctx.fillRect(pigX + 50, pigY + 42, 28, 25);
-                    ctx.fillRect(pigX + 25, pigY + 55, 20, 16);
+                    // Pieces scaled 1.5x (18x15 -> 27x22)
+                    ctx.fillRect(pigX + 15, pigY + 37, 27, 22);
+                    // (20x18 -> 30x27)
+                    ctx.fillRect(pigX + 52, pigY + 45, 30, 27);
+                    // (15x12 -> 22x18)
+                    ctx.fillRect(pigX + 27, pigY + 60, 22, 18);
 
-                    // Coins scattered (much bigger)
+                    // Coins scattered (8x8 -> 12x12)
                     ctx.fillStyle = '#FFD700';
-                    ctx.fillRect(pigX + 20, pigY + 45, 12, 12);
-                    ctx.fillRect(pigX + 45, pigY + 52, 12, 12);
-                    ctx.fillRect(pigX + 63, pigY + 50, 12, 12);
+                    ctx.fillRect(pigX + 22, pigY + 48, 12, 12);
+                    ctx.fillRect(pigX + 48, pigY + 57, 12, 12);
+                    ctx.fillRect(pigX + 67, pigY + 54, 12, 12);
                 }
             });
 
@@ -3633,10 +4395,10 @@
                 // Always draw counters in basement
                 drawShopCounter(shopCounters.weapons);
                 drawShopCounter(shopCounters.equipment);
-                drawShopCounter(shopCounters.boosts);
+                drawSuperUsdSafe();
 
                 // Always draw merchant on right side (behind counters)
-                drawMerchant(canvas.width - 150, 240);
+                drawMerchant(canvas.width - 150, 260);
 
                 // Draw pig with proper model
                 if (game.cutscenePhase === 0) {
@@ -3644,7 +4406,7 @@
                     const tempPlayerX = player.x;
                     const tempPlayerY = player.y;
                     player.x = game.pigX;
-                    player.y = 380;
+                    player.y = 390; // On the floor (450 - 60 height)
 
                     drawPig(); // Use actual pig drawing function
 
@@ -3664,7 +4426,7 @@
                     const tempPlayerX = player.x;
                     const tempPlayerY = player.y;
                     player.x = 70;  // Far left, not blocking counters
-                    player.y = 380;
+                    player.y = 390; // On the floor (450 - 60 height)
 
                     drawPig(); // Use actual pig drawing function
 
@@ -3679,12 +4441,11 @@
 
                     shopCounters.equipment.items.forEach(item => {
                         const isHovered = game.hoveredItem && game.hoveredItem.id === item.id;
-                        drawArmorOnCounter(item.x, item.y, item.width, item.height, isHovered);
-                    });
-
-                    shopCounters.boosts.items.forEach(item => {
-                        const isHovered = game.hoveredItem && game.hoveredItem.id === item.id;
-                        drawHealthOnCounter(item.x, item.y, item.width, item.height, isHovered);
+                        if (item.id === 'armor') {
+                            drawArmorOnCounter(item.x, item.y, item.width, item.height, isHovered);
+                        } else if (item.id === 'health') {
+                            drawHealthOnCounter(item.x, item.y, item.width, item.height, isHovered);
+                        }
                     });
 
                     // Draw pig in front left (not blocking counters)
@@ -3755,6 +4516,9 @@
         function gameOver() {
             game.running = false;
 
+            // Stop background music
+            backgroundMusic.pause();
+
             // Save game statistics
             GameStats.saveAttempt(game.score, game.money, game.level, weapons[game.weapon].name, game.kills);
 
@@ -3762,15 +4526,34 @@
             document.getElementById('finalMoney').textContent = game.money;
             document.getElementById('gameOver').classList.add('active');
 
+            // Disable buttons for 1 second to prevent accidental clicks
+            const restartBtn = document.getElementById('restart');
+            const mainMenuBtn = document.getElementById('mainMenuButton');
+            restartBtn.disabled = true;
+            mainMenuBtn.disabled = true;
+            restartBtn.style.opacity = '0.5';
+            mainMenuBtn.style.opacity = '0.5';
+            restartBtn.style.cursor = 'not-allowed';
+            mainMenuBtn.style.cursor = 'not-allowed';
+
+            setTimeout(() => {
+                restartBtn.disabled = false;
+                mainMenuBtn.disabled = false;
+                restartBtn.style.opacity = '1';
+                mainMenuBtn.style.opacity = '1';
+                restartBtn.style.cursor = 'pointer';
+                mainMenuBtn.style.cursor = 'pointer';
+            }, 1000);
+
             // Stop background music on game over
-            stopBackgroundMusic();
+            // stopBackgroundMusic(); // Music disabled
         }
 
         // Start game
         function startGame() {
             game.running = true;
             game.score = 0;
-            game.money = 0;
+            game.money = 1000; // Test value - will change to 0 later
             game.health = 5;
             game.speed = 3;
             game.frameCount = 0;
@@ -3791,6 +4574,7 @@
             game.kills = 0; // Reset kill counter
             game.helicopterActive = false; // Reset helicopter flag
             game.nextHelicopterScore = 500; // Reset helicopter spawn milestone
+            game.nextRedHelicopterScore = 2000; // Reset red helicopter spawn milestone
             game.nextStreetLampScore = 100; // Reset street lamp spawn milestone
             game.cutsceneActive = false; // Reset cutscene
             game.cutscenePhase = 0;
@@ -3798,7 +4582,10 @@
             game.pigX = 100;
             game.basementSpawned = false; // Reset basement spawn flag
             game.autoRunning = false; // Reset auto-running flag
+            game.investment = 0; // Reset investment
+            game.pendingPayout = 0; // Reset pending payout
 
+            player.x = 100; // Reset player position to left side
             player.y = 440;
             player.velocityY = 0;
             player.isJumping = false;
@@ -3818,7 +4605,10 @@
             updateUI();
 
             // Start background music
-            // playBackgroundMusic(); // Music disabled
+            if (game.musicEnabled) {
+                backgroundMusic.currentTime = 0; // Reset to start
+                backgroundMusic.play().catch(err => console.log('Music play failed:', err));
+            }
         }
 
         // Shop functions
@@ -3830,12 +4620,17 @@
             game.pigX = -50; // Start pig off-screen left for running animation
             game.running = false;
 
+            // Calculate investment payout when entering new shop
+            if (game.investment > 0) {
+                game.pendingPayout = Math.floor(game.investment * 1.5);
+                game.investment = 0; // Clear investment after calculating payout
+            }
+
             // Prepare shop for when player accepts
             document.getElementById('shopLevel').textContent = game.level + 1;
             updateShopUI();
 
-            // Pause background music
-            stopBackgroundMusic();
+            // Music continues playing in shop
         }
 
         function actuallyOpenShop() {
@@ -3856,8 +4651,8 @@
             if (game.level < game.shopMilestones.length) {
                 game.nextShopScore = game.shopMilestones[game.level];
             } else {
-                // After all milestones, add 15000 to each next milestone
-                game.nextShopScore += 15000;
+                // After all milestones (after 12000), add 3000 to each next milestone
+                game.nextShopScore += 3000;
             }
 
             // Reset basement spawned flag for next milestone
@@ -3871,10 +4666,55 @@
             updateUI();
         }
 
+        // SuperUSD Investment functions
+        function openSuperUsdModal() {
+            const modal = document.getElementById('superUsdModal');
+            modal.style.display = 'block';
+            updateInvestmentUI();
+        }
+
+        function closeSuperUsdModal() {
+            document.getElementById('superUsdModal').style.display = 'none';
+        }
+
+        function updateInvestmentUI() {
+            document.getElementById('investAvailable').textContent = game.money;
+            document.getElementById('currentInvestment').textContent = game.investment;
+            // Button is always green and clickable - logic handled in click event
+        }
+
+        function investMoney(amount) {
+            if (amount === 'all') {
+                amount = game.money;
+            }
+
+            if (game.money >= amount && amount > 0) {
+                game.money -= amount;
+                game.investment += amount;
+                playButtonSound('purchase');
+                updateInvestmentUI();
+                updateUI();
+            } else {
+                playButtonSound('error');
+            }
+        }
+
+        function withdrawInvestment() {
+            if (game.investment > 0) {
+                game.money += game.investment;
+                game.investment = 0;
+                playButtonSound('purchase');
+                updateInvestmentUI();
+                updateUI();
+            } else {
+                playButtonSound('error');
+            }
+        }
+
         function buyItemFromCounter(itemId) {
             // Buy item from interactive counter
             if (itemId === 'health') {
-                buyItem('health', 50);
+                buyItem('health', 100);
             } else if (itemId === 'armor') {
                 buyItem('armor', 100);
             } else if (itemId in weapons) {
@@ -3886,22 +4726,29 @@
         function buyItem(item, cost) {
             if (item === 'health') {
                 if (game.money >= cost && game.health < game.maxHealth) {
+                    playButtonSound('purchase');
                     game.money -= cost;
                     game.health = Math.min(game.health + 1, game.maxHealth); // Only +1 HP now
                     updateUI();
                     updateShopUI();
+                } else {
+                    playButtonSound('error');
                 }
             } else if (item === 'armor') {
                 if (game.money >= cost) {
+                    playButtonSound('purchase');
                     game.money -= cost;
                     game.armor++;
                     updateUI();
+                } else {
+                    playButtonSound('error');
                 }
             } else {
                 // Weapon purchase
                 const weapon = item;
                 if (!game.ownedWeapons.includes(weapon)) {
                     if (game.money >= cost) {
+                        playButtonSound('purchase');
                         game.money -= cost;
                         game.ownedWeapons.push(weapon);
                         game.weapon = weapon;
@@ -3909,9 +4756,12 @@
                         game.isReloading = false;
                         updateUI();
                         updateShopUI();
+                    } else {
+                        playButtonSound('error');
                     }
                 } else {
                     // Already owned - just switch to it
+                    playButtonSound('click');
                     game.weapon = weapon;
                     game.currentAmmo = weapons[weapon].magSize;
                     game.isReloading = false;
@@ -3928,7 +4778,7 @@
                 healthBtn.querySelector('div:last-child').textContent = 'MAX HEALTH REACHED';
             } else {
                 healthBtn.style.opacity = '1';
-                healthBtn.querySelector('div:last-child').textContent = 'Price: $50';
+                healthBtn.querySelector('div:last-child').textContent = 'Price: $100';
             }
 
             // Update Colt button
@@ -3944,7 +4794,7 @@
                 shotgunBtn.style.opacity = '0.6';
                 shotgunBtn.querySelector('div:last-child').textContent = game.weapon === 'shotgun' ? 'Equipped ✓' : 'You own this ✓ (click to equip)';
             } else {
-                shotgunBtn.querySelector('div:last-child').textContent = '8 rounds | Damage: 3x5 | Price: $200';
+                shotgunBtn.querySelector('div:last-child').textContent = '6 rounds | Damage: 3x5 | Price: $200';
             }
 
             // Update Sniper button
@@ -3953,7 +4803,7 @@
                 sniperBtn.style.opacity = '0.6';
                 sniperBtn.querySelector('div:last-child').textContent = game.weapon === 'sniper' ? 'Equipped ✓' : 'You own this ✓ (click to equip)';
             } else {
-                sniperBtn.querySelector('div:last-child').textContent = '5 rounds | Damage: 10 | Price: $300';
+                sniperBtn.querySelector('div:last-child').textContent = '5 rounds | Damage: 5 | Price: $200';
             }
 
             // Update Tommy button
@@ -3992,11 +4842,24 @@
                 const mouseX = e.clientX - rect.left;
                 const mouseY = e.clientY - rect.top;
 
+                // Check if clicked on SuperUSD safe
+                const safe = shopCounters.superusd;
+                const safeX = safe.safeX;
+                const safeY = safe.safeY;
+                const safeWidth = safe.safeWidth;
+                const safeHeight = safe.safeHeight;
+
+                if (mouseX >= safeX && mouseX <= safeX + safeWidth &&
+                    mouseY >= safeY && mouseY <= safeY + safeHeight) {
+                    // Open SuperUSD investment modal
+                    openSuperUsdModal();
+                    return;
+                }
+
                 // Check if clicked on any item
                 const allItems = [
                     ...shopCounters.weapons.items,
-                    ...shopCounters.equipment.items,
-                    ...shopCounters.boosts.items
+                    ...shopCounters.equipment.items
                 ];
 
                 for (const item of allItems) {
@@ -4024,10 +4887,22 @@
                 // Check hover on items
                 game.hoveredItem = null;
 
+                // Check hover on SuperUSD safe
+                const safe = shopCounters.superusd;
+                const safeX = safe.safeX;
+                const safeY = safe.safeY;
+                const safeWidth = safe.safeWidth;
+                const safeHeight = safe.safeHeight;
+
+                if (mouseX >= safeX && mouseX <= safeX + safeWidth &&
+                    mouseY >= safeY && mouseY <= safeY + safeHeight) {
+                    canvas.style.cursor = 'pointer';
+                    return;
+                }
+
                 const allItems = [
                     ...shopCounters.weapons.items,
-                    ...shopCounters.equipment.items,
-                    ...shopCounters.boosts.items
+                    ...shopCounters.equipment.items
                 ];
 
                 for (const item of allItems) {
@@ -4049,20 +4924,110 @@
 
         // Merchant dialog event listeners
         document.getElementById('acceptShop').addEventListener('click', () => {
+            playButtonSound('click');
             actuallyOpenShop();
         });
 
         document.getElementById('declineShop').addEventListener('click', () => {
+            playButtonSound('click');
             // Close dialog and skip shop
             document.getElementById('merchantDialog').style.display = 'none';
             game.cutsceneActive = false;
             closeShop(); // Continue to next level
         });
 
-        document.getElementById('closeShop').addEventListener('click', closeShop);
+        document.getElementById('askRestock').addEventListener('click', () => {
+            playButtonSound('click');
+            const dialog = document.getElementById('merchantDialog');
+
+            // Check if player already asked this question before
+            if (game.hasAskedRestock) {
+                // Angry response - second time asking
+                dialog.innerHTML = `
+                    <div style="position: absolute; right: -20px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-left: 20px solid #FFD700; border-top: 15px solid transparent; border-bottom: 15px solid transparent;"></div>
+                    <div style="position: absolute; right: -15px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-left: 15px solid #1a1a1a; border-top: 12px solid transparent; border-bottom: 12px solid transparent;"></div>
+                    <h2 style="margin-bottom: 15px; text-shadow: 2px 2px 0px #000000; font-size: 24px;">👤 Crouton 😠</h2>
+                    <p style="font-size: 18px; margin-bottom: 25px; color: #FF4444; line-height: 1.5; font-weight: bold;">I already answered your question!<br>GET OUT OF HERE!</p>
+                    <div style="text-align: center;">
+                        <button id="okAngry" style="padding: 12px 30px; font-size: 16px; background: #8B0000; color: #FFF; border: 3px solid #FF0000; cursor: pointer; font-weight: bold;">But I just asked...</button>
+                    </div>
+                `;
+
+                // Add event listener - kick player out of shop
+                document.getElementById('okAngry').addEventListener('click', () => {
+                    playButtonSound('click');
+                    document.getElementById('merchantDialog').style.display = 'none';
+                    game.cutsceneActive = false;
+                    closeShop(); // Exit shop
+                });
+            } else {
+                // First time asking - show SOON
+                game.hasAskedRestock = true; // Mark as asked
+
+                dialog.innerHTML = `
+                    <div style="position: absolute; right: -20px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-left: 20px solid #FFD700; border-top: 15px solid transparent; border-bottom: 15px solid transparent;"></div>
+                    <div style="position: absolute; right: -15px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-left: 15px solid #1a1a1a; border-top: 12px solid transparent; border-bottom: 12px solid transparent;"></div>
+                    <h2 style="margin-bottom: 15px; text-shadow: 2px 2px 0px #000000; font-size: 24px;">👤 Crouton</h2>
+                    <div style="text-align: center; margin: 30px 0;">
+                        <p style="font-size: 80px; font-weight: bold; color: #FFD700; text-shadow: 4px 4px 0px #000000, 0 0 20px #FFD700; letter-spacing: 5px; margin: 0;">SOON</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <button id="okRestock" style="padding: 12px 30px; font-size: 16px; background: #FFD700; color: #000; border: 3px solid #FFA500; cursor: pointer; font-weight: bold;">Got it!</button>
+                    </div>
+                `;
+
+                // Add event listener for the "Got it!" button - close dialog and open shop
+                document.getElementById('okRestock').addEventListener('click', () => {
+                    playButtonSound('click');
+                    document.getElementById('merchantDialog').style.display = 'none';
+                    // Open shop properly so player can buy items
+                    actuallyOpenShop();
+                });
+            }
+        });
+
+        document.getElementById('closeShop').addEventListener('click', () => {
+            playButtonSound('click');
+            // Payout is calculated when opening next shop, not when closing current one
+            closeShop();
+        });
+
+        // SuperUSD modal event listeners
+        document.querySelectorAll('.invest-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const amount = btn.getAttribute('data-amount');
+                if (amount === 'all') {
+                    investMoney('all');
+                } else {
+                    investMoney(parseInt(amount));
+                }
+            });
+        });
+
+        document.getElementById('withdrawInvestment').addEventListener('click', () => {
+            withdrawInvestment();
+        });
+
+        document.getElementById('collectPayout').addEventListener('click', () => {
+            if (game.pendingPayout > 0) {
+                playButtonSound('purchase');
+                game.money += game.pendingPayout;
+                game.pendingPayout = 0;
+                updateUI();
+                updateInvestmentUI();
+            } else {
+                // No profit available - just play click sound
+                playButtonSound('click');
+            }
+        });
+
+        document.getElementById('closeSuperUsd').addEventListener('click', () => {
+            playButtonSound('click');
+            closeSuperUsdModal();
+        });
 
         document.getElementById('buyHealth').addEventListener('click', () => {
-            buyItem('health', 50);
+            buyItem('health', 100);
         });
 
         document.getElementById('buyArmor').addEventListener('click', () => {
@@ -4078,46 +5043,61 @@
         });
 
         document.getElementById('buySniper').addEventListener('click', () => {
-            buyItem('sniper', 300);
+            buyItem('sniper', 200);
         });
 
         document.getElementById('buyTommy').addEventListener('click', () => {
             buyItem('tommy', 350);
         });
 
-        document.getElementById('restart').addEventListener('click', startGame);
+        document.getElementById('restart').addEventListener('click', (e) => {
+            if (e.target.disabled) return;
+            playButtonSound('click');
+            startGame();
+        });
 
-        document.getElementById('mainMenuButton').addEventListener('click', () => {
+        document.getElementById('mainMenuButton').addEventListener('click', (e) => {
+            if (e.target.disabled) return;
+            playButtonSound('click');
             document.getElementById('gameOver').classList.remove('active');
             document.getElementById('mainMenu').classList.remove('hidden');
             game.running = false;
+
+            // Stop background music
+            backgroundMusic.pause();
         });
 
         // Main Menu event listeners
         document.getElementById('startButton').addEventListener('click', () => {
+            playButtonSound('click');
             document.getElementById('mainMenu').classList.add('hidden');
             startGame();
         });
 
         document.getElementById('settingsButton').addEventListener('click', () => {
+            playButtonSound('click');
             document.getElementById('settingsMenu').classList.add('active');
         });
 
         document.getElementById('closeSettings').addEventListener('click', () => {
+            playButtonSound('click');
             document.getElementById('settingsMenu').classList.remove('active');
         });
 
         // Statistics button
         document.getElementById('statsButton').addEventListener('click', () => {
+            playButtonSound('click');
             openStatsMenu();
         });
 
         document.getElementById('closeStats').addEventListener('click', () => {
+            playButtonSound('click');
             document.getElementById('statsMenu').classList.remove('active');
         });
 
         document.getElementById('clearStats').addEventListener('click', () => {
             if (confirm('Are you sure you want to clear all statistics? This cannot be undone!')) {
+                playButtonSound('click');
                 GameStats.clearStats();
                 openStatsMenu(); // Refresh the stats display
             }
@@ -4177,14 +5157,31 @@
             const volume = e.target.value;
             game.volume = volume / 100; // Convert to 0.0 - 1.0
             volumeValue.textContent = volume + '%';
+        });
 
-            // Update background music volume
-            updateMusicVolume();
+        // Music volume slider
+        const musicVolumeSlider = document.getElementById('musicVolumeSlider');
+        const musicVolumeValue = document.getElementById('musicVolumeValue');
 
-            // Restart music if it was stopped due to muted volume
-            // if (game.volume > 0 && !musicPlaying && game.running) {
-            //     playBackgroundMusic(); // Music disabled
-            // }
+        musicVolumeSlider.addEventListener('input', (e) => {
+            const volume = e.target.value;
+            game.musicVolume = volume / 100; // Convert to 0.0 - 1.0
+            musicVolumeValue.textContent = volume + '%';
+            backgroundMusic.volume = game.musicVolume;
+        });
+
+        // Music toggle button
+        const musicToggle = document.getElementById('musicToggle');
+
+        musicToggle.addEventListener('click', () => {
+            game.musicEnabled = !game.musicEnabled;
+            musicToggle.textContent = game.musicEnabled ? 'ON' : 'OFF';
+
+            if (game.musicEnabled && game.running) {
+                backgroundMusic.play().catch(err => console.log('Music play failed:', err));
+            } else {
+                backgroundMusic.pause();
+            }
         });
 
         // Shop tab switching
@@ -4193,6 +5190,7 @@
 
         shopTabs.forEach(tab => {
             tab.addEventListener('click', () => {
+                playButtonSound('click');
                 // Remove active class from all tabs and contents
                 shopTabs.forEach(t => t.classList.remove('active'));
                 shopContents.forEach(c => c.classList.remove('active'));
