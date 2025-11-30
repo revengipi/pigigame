@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gangster Pig - Endless Runner</title>
+    <title>PIGGY'S REVENGE</title>
     <style>
         * {
             margin: 0;
@@ -531,7 +531,7 @@
                 <circle cx="100" cy="155" r="12" fill="#FF1493"/>
             </svg>
 
-            <h1 class="menu-title">GANGSTER PIG</h1>
+            <h1 class="menu-title">PIGGY'S REVENGE</h1>
             <button class="menu-button" id="startButton">START GAME</button>
             <button class="menu-button" id="statsButton">STATISTICS</button>
             <button class="menu-button" id="settingsButton">SETTINGS</button>
@@ -729,7 +729,7 @@
         const game = {
             running: false,
             score: 0,
-            money: 1000, // Test value - will change to 0 later
+            money: 0,
             health: 5,
             speed: 3,
             frameCount: 0,
@@ -4553,7 +4553,7 @@
         function startGame() {
             game.running = true;
             game.score = 0;
-            game.money = 1000; // Test value - will change to 0 later
+            game.money = 0;
             game.health = 5;
             game.speed = 3;
             game.frameCount = 0;
