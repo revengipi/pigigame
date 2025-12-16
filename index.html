@@ -543,8 +543,8 @@
             <div class="setting-item">
                 <div class="setting-label">Sound Effects Volume</div>
                 <div class="volume-control">
-                    <input type="range" min="0" max="100" value="10" class="volume-slider" id="volumeSlider">
-                    <span class="volume-value" id="volumeValue">10%</span>
+                    <input type="range" min="0" max="100" value="20" class="volume-slider" id="volumeSlider">
+                    <span class="volume-value" id="volumeValue">20%</span>
                 </div>
             </div>
             <div class="setting-item">
@@ -679,15 +679,30 @@
         <!-- SuperUSD Investment Modal -->
         <div id="superUsdModal" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #000000; padding: 40px; border: 5px solid #9CE500; z-index: 400; box-shadow: 0 0 40px rgba(156, 229, 0, 0.6), inset 0 0 30px rgba(156, 229, 0, 0.2); min-width: 400px;">
             <h2 style="text-align: center; color: #9CE500; text-shadow: 3px 3px 0px #000000, 0 0 20px #9CE500; margin-bottom: 20px;">💰 SuperUSD Investment 💰</h2>
-            <p style="color: #FFB6C1; text-align: center; margin-bottom: 20px; font-size: 18px;">Invest your money and get <strong style="color: #9CE500;">1.5x returns</strong> in the next shop!</p>
+            <p style="color: #FFB6C1; text-align: center; margin-bottom: 20px; font-size: 18px;">Invest your money and earn <strong style="color: #FFD700;">50% profit</strong> in the next shop!<br><span style="font-size: 14px; color: #AAA;">Use Withdraw to get your principal back</span></p>
 
             <div style="text-align: center; margin-bottom: 20px;">
                 <div style="color: #FF1493; font-size: 20px; margin-bottom: 10px;">Available: $<span id="investAvailable">0</span></div>
             </div>
 
-            <!-- Collect Profit Button -->
-            <button id="collectPayout" style="padding: 15px; margin-bottom: 20px; font-size: 18px; background: linear-gradient(135deg, #9CE500 0%, #7BC400 100%); border: 3px solid #9CE500; color: #000; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;">💰 Collect Profit 💰</button>
+            <!-- Collect Profit Section with Stats -->
+            <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: stretch;">
+                <button id="collectPayout" style="flex: 1; padding: 15px; font-size: 18px; background: linear-gradient(135deg, #9CE500 0%, #7BC400 100%); border: 3px solid #9CE500; color: #000; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;">💰 Collect Profit 💰</button>
 
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                    <!-- Invested Amount Display -->
+                    <div style="padding: 8px; background: rgba(156, 229, 0, 0.1); border: 2px solid #9CE500; border-radius: 4px;">
+                        <div style="color: #FFB6C1; font-size: 12px; margin-bottom: 2px;">💵 Invested:</div>
+                        <div style="color: #9CE500; font-size: 18px; font-weight: bold;">$<span id="currentInvestment">0</span></div>
+                    </div>
+
+                    <!-- Profit Ready Display -->
+                    <div style="padding: 8px; background: rgba(255, 215, 0, 0.1); border: 2px solid #FFD700; border-radius: 4px;">
+                        <div style="color: #FFB6C1; font-size: 12px; margin-bottom: 2px;">💰 Profit Ready:</div>
+                        <div style="color: #FFD700; font-size: 18px; font-weight: bold;">$<span id="profitReady">0</span></div>
+                    </div>
+                </div>
+            </div>
 
             <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
                 <button class="invest-btn" data-amount="10" style="padding: 15px; font-size: 18px; background: linear-gradient(135deg, #9CE500 0%, #7BC400 100%); border: 3px solid #9CE500; color: #000; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;">Invest $10</button>
@@ -725,6 +740,9 @@
         const superUsdLogo = new Image();
         superUsdLogo.src = 'Social_Logo_Round.svg?v=' + Date.now(); // Add cache buster
 
+        // Save original merchant dialog HTML for restoration
+        let originalMerchantDialogHTML = '';
+
         // Game state
         const game = {
             running: false,
@@ -753,7 +771,7 @@
             nextPiggyBank: 50 + Math.random() * 400, // Random spawn point in first cycle (50-450)
             piggyBankSpawned: false,
             lastPiggyBankCycle: 0, // Track which 500-point cycle we're in
-            volume: 0.1, // Sound effects volume level (0.0 to 1.0)
+            volume: 0.2, // Sound effects volume level (0.0 to 1.0) - 20%
             musicVolume: 0.1, // Music volume level (0.0 to 1.0) - 10%
             musicEnabled: true, // Music on/off toggle
             kills: 0, // Track enemy kills
@@ -862,6 +880,12 @@
         // Load audio asynchronously to prevent blocking
         backgroundMusic.load();
 
+        // Damage/punch sound effect
+        const punchSound = new Audio('Punch.ogg');
+        punchSound.volume = 0.504; // Increased by 40% again (was 0.36, now 0.504)
+        punchSound.preload = 'auto';
+        punchSound.load();
+
         // Function to create 8-bit weapon sounds
         function create8BitSound(type) {
             const oscillator = audioContext.createOscillator();
@@ -910,6 +934,16 @@
                     gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
                     oscillator.start(audioContext.currentTime);
                     oscillator.stop(audioContext.currentTime + 0.3);
+                    break;
+
+                case 'ak47': // AK-47 - automatic rifle, punchy mid-range sound
+                    oscillator.type = 'square';
+                    oscillator.frequency.setValueAtTime(170, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(60, audioContext.currentTime + 0.08);
+                    gainNode.gain.setValueAtTime(game.volume * 0.35, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.08);
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.08);
                     break;
             }
         }
@@ -1037,6 +1071,20 @@
             }
         }
 
+        // Play punch/damage sound
+        function playPunchSound() {
+            if (game.volume === 0) return; // Don't play if muted
+
+            try {
+                // Clone the audio to allow overlapping sounds
+                const sound = punchSound.cloneNode();
+                sound.volume = game.volume * 0.504; // Increased by 40% again (was 0.36, now 0.504)
+                sound.play().catch(err => console.log('Punch sound play failed:', err));
+            } catch (e) {
+                console.log('Punch sound play failed:', e);
+            }
+        }
+
         // Background music system removed for optimization
 
         // Player (Pig)
@@ -1082,7 +1130,7 @@
                 pumpTime: 50 // Increased from 30 (longer pump animation)
             },
             tommy: {
-                fireRate: 8, // Reduced fire rate by 20% (was 7, now 8 - slower)
+                fireRate: 8.4, // Further reduced fire rate by 5% (was 8, now 8.4 - slower)
                 damage: 1,
                 bulletSpeed: 15,
                 spread: 5.44, // Reduced spread by 20% (was 6.8, now 5.44 - more accurate)
@@ -1106,7 +1154,7 @@
                 bulletCount: 1
             },
             ak47: {
-                fireRate: 14, // Reduced fire rate by 30% (was 11, now 14 - slower)
+                fireRate: 15.4, // Further reduced fire rate by 10% (was 14, now 15.4 - slower)
                 damage: 3,
                 bulletSpeed: 19,
                 spread: 2,
@@ -3507,6 +3555,10 @@
                     if (game.pigX >= 70) { // Stop at final position (70)
                         game.cutscenePhase = 1;
                         game.cutsceneTimer = 0;
+                        // Restore original merchant dialog content before showing
+                        document.getElementById('merchantDialog').innerHTML = originalMerchantDialogHTML;
+                        // Reattach event listeners after restoring HTML
+                        attachMerchantDialogListeners();
                         // Show merchant dialog
                         document.getElementById('merchantDialog').style.display = 'block';
                     }
@@ -3689,6 +3741,7 @@
                                 game.armor--;
                             } else {
                                 game.health--;
+                                playPunchSound(); // Play damage sound when health is lost
                             }
 
                             returnToPool('enemies', enemies[i]);
@@ -3748,6 +3801,7 @@
                             game.armor--;
                         } else {
                             game.health--;
+                            playPunchSound(); // Play damage sound when health is lost
                         }
 
                         obstacles.splice(i, 1);
@@ -3812,6 +3866,7 @@
                             game.armor--;
                         } else {
                             game.health--;
+                            playPunchSound(); // Play damage sound when health is lost
                         }
 
                         if (game.health <= 0) {
@@ -4462,11 +4517,36 @@
                         drawItemTooltip(game.hoveredItem, game.hoveredItem.x, game.hoveredItem.y);
                     }
 
+                    // Draw exit button in top right corner
+                    const exitButtonX = canvas.width - 120;
+                    const exitButtonY = 15;
+                    const exitButtonWidth = 100;
+                    const exitButtonHeight = 40;
+
+                    // Check if mouse is hovering over exit button
+                    const isExitHovered = game.mouseX >= exitButtonX && game.mouseX <= exitButtonX + exitButtonWidth &&
+                                          game.mouseY >= exitButtonY && game.mouseY <= exitButtonY + exitButtonHeight;
+
+                    // Draw exit button background
+                    ctx.fillStyle = isExitHovered ? '#FF1493' : '#8B0000';
+                    ctx.fillRect(exitButtonX, exitButtonY, exitButtonWidth, exitButtonHeight);
+
+                    // Draw exit button border
+                    ctx.strokeStyle = '#FF0000';
+                    ctx.lineWidth = 3;
+                    ctx.strokeRect(exitButtonX, exitButtonY, exitButtonWidth, exitButtonHeight);
+
+                    // Draw exit button text
+                    ctx.fillStyle = '#FFF';
+                    ctx.font = 'bold 18px Courier New';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('EXIT', exitButtonX + exitButtonWidth / 2, exitButtonY + 26);
+
                     // Draw instructions
                     ctx.fillStyle = '#FFD700';
                     ctx.font = 'bold 20px Courier New';
                     ctx.textAlign = 'center';
-                    ctx.fillText('Hover items to see details | Click to buy | ESC to exit', canvas.width / 2, 50);
+                    ctx.fillText('Hover items to see details | Click to buy', canvas.width / 2, 50);
                     ctx.fillText(`Money: $${game.money}`, canvas.width / 2, 490);
                 }
             }
@@ -4584,6 +4664,7 @@
             game.autoRunning = false; // Reset auto-running flag
             game.investment = 0; // Reset investment
             game.pendingPayout = 0; // Reset pending payout
+            game.hasAskedRestock = false; // Reset restock question flag
 
             player.x = 100; // Reset player position to left side
             player.y = 440;
@@ -4602,6 +4683,10 @@
             document.getElementById('shop').classList.remove('active');
             document.getElementById('mainMenu').classList.add('hidden');
             document.getElementById('merchantDialog').style.display = 'none';
+            // Restore original merchant dialog content
+            document.getElementById('merchantDialog').innerHTML = originalMerchantDialogHTML;
+            // Reattach event listeners after restoring HTML
+            attachMerchantDialogListeners();
             updateUI();
 
             // Start background music
@@ -4620,10 +4705,10 @@
             game.pigX = -50; // Start pig off-screen left for running animation
             game.running = false;
 
-            // Calculate investment payout when entering new shop
+            // Calculate investment profit when entering new shop (50% profit, not total return)
             if (game.investment > 0) {
-                game.pendingPayout = Math.floor(game.investment * 1.5);
-                game.investment = 0; // Clear investment after calculating payout
+                game.pendingPayout += Math.floor(game.investment * 0.5); // Add profit (accumulates if not collected)
+                // Investment stays in SuperUSD until withdrawn
             }
 
             // Prepare shop for when player accepts
@@ -4658,6 +4743,9 @@
             // Reset basement spawned flag for next milestone
             game.basementSpawned = false;
 
+            // Reset restock question flag for next shop
+            game.hasAskedRestock = false;
+
             // Show UI panel again
             document.getElementById('ui').style.display = 'block';
 
@@ -4680,6 +4768,7 @@
         function updateInvestmentUI() {
             document.getElementById('investAvailable').textContent = game.money;
             document.getElementById('currentInvestment').textContent = game.investment;
+            document.getElementById('profitReady').textContent = game.pendingPayout;
             // Button is always green and clickable - logic handled in click event
         }
 
@@ -4842,6 +4931,22 @@
                 const mouseX = e.clientX - rect.left;
                 const mouseY = e.clientY - rect.top;
 
+                // Check if clicked on exit button
+                const exitButtonX = canvas.width - 120;
+                const exitButtonY = 15;
+                const exitButtonWidth = 100;
+                const exitButtonHeight = 40;
+
+                if (mouseX >= exitButtonX && mouseX <= exitButtonX + exitButtonWidth &&
+                    mouseY >= exitButtonY && mouseY <= exitButtonY + exitButtonHeight) {
+                    playButtonSound('click');
+                    game.inShop = false;
+                    game.cutsceneActive = false;
+                    game.hoveredItem = null;
+                    closeShop();
+                    return;
+                }
+
                 // Check if clicked on SuperUSD safe
                 const safe = shopCounters.superusd;
                 const safeX = safe.safeX;
@@ -4923,20 +5028,22 @@
         });
 
         // Merchant dialog event listeners
-        document.getElementById('acceptShop').addEventListener('click', () => {
-            playButtonSound('click');
-            actuallyOpenShop();
-        });
+        // Function to attach merchant dialog event listeners
+        function attachMerchantDialogListeners() {
+            document.getElementById('acceptShop').addEventListener('click', () => {
+                playButtonSound('click');
+                actuallyOpenShop();
+            });
 
-        document.getElementById('declineShop').addEventListener('click', () => {
-            playButtonSound('click');
-            // Close dialog and skip shop
-            document.getElementById('merchantDialog').style.display = 'none';
-            game.cutsceneActive = false;
-            closeShop(); // Continue to next level
-        });
+            document.getElementById('declineShop').addEventListener('click', () => {
+                playButtonSound('click');
+                // Close dialog and skip shop
+                document.getElementById('merchantDialog').style.display = 'none';
+                game.cutsceneActive = false;
+                closeShop(); // Continue to next level
+            });
 
-        document.getElementById('askRestock').addEventListener('click', () => {
+            document.getElementById('askRestock').addEventListener('click', () => {
             playButtonSound('click');
             const dialog = document.getElementById('merchantDialog');
 
@@ -4984,7 +5091,11 @@
                     actuallyOpenShop();
                 });
             }
-        });
+            });
+        }
+
+        // Attach listeners on initial page load
+        attachMerchantDialogListeners();
 
         document.getElementById('closeShop').addEventListener('click', () => {
             playButtonSound('click');
@@ -5207,6 +5318,9 @@
         // Initialize and start
         initBuildings();
         gameLoop();
+
+        // Save original merchant dialog HTML for restoration after modifications
+        originalMerchantDialogHTML = document.getElementById('merchantDialog').innerHTML;
 
         // Don't auto-start game, wait for menu interaction
         // startGame(); // Removed - game starts from menu now
