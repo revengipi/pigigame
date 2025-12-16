@@ -708,10 +708,10 @@
                 <button class="invest-btn" data-amount="10" style="padding: 15px; font-size: 18px; background: linear-gradient(135deg, #9CE500 0%, #7BC400 100%); border: 3px solid #9CE500; color: #000; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;">Invest $10</button>
                 <button class="invest-btn" data-amount="50" style="padding: 15px; font-size: 18px; background: linear-gradient(135deg, #9CE500 0%, #7BC400 100%); border: 3px solid #9CE500; color: #000; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;">Invest $50</button>
                 <button class="invest-btn" data-amount="100" style="padding: 15px; font-size: 18px; background: linear-gradient(135deg, #9CE500 0%, #7BC400 100%); border: 3px solid #9CE500; color: #000; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;">Invest $100</button>
-                <button class="invest-btn" data-amount="all" style="padding: 15px; font-size: 18px; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); border: 3px solid #FFD700; color: #000; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;">Invest ALL</button>
+                <button class="invest-btn" data-amount="all" style="padding: 15px; font-size: 18px; background: linear-gradient(135deg, #9CE500 0%, #7BC400 100%); border: 3px solid #9CE500; color: #000; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;">Invest ALL</button>
             </div>
             <div style="display: flex; gap: 10px;">
-                <button id="withdrawInvestment" style="flex: 1; padding: 15px; font-size: 18px; background: linear-gradient(135deg, #FF1493 0%, #FF69B4 100%); border: 3px solid #FF1493; color: #000; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;">Withdraw</button>
+                <button id="withdrawInvestment" style="flex: 1; padding: 15px; font-size: 18px; background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%); border: 3px solid #FF0000; color: #FFF; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;">Withdraw</button>
                 <button id="closeSuperUsd" style="flex: 1; padding: 15px; font-size: 18px; background: linear-gradient(135deg, #666 0%, #888 100%); border: 3px solid #666; color: #FFF; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;">Close</button>
             </div>
         </div>
@@ -885,6 +885,12 @@
         punchSound.volume = 0.504; // Increased by 40% again (was 0.36, now 0.504)
         punchSound.preload = 'auto';
         punchSound.load();
+
+        // Metal hit sound effect (for helicopter hits)
+        const metalSound = new Audio('metal.ogg'); // Lowercase for Linux compatibility
+        metalSound.volume = 0.3;
+        metalSound.preload = 'auto';
+        metalSound.load();
 
         // Function to create 8-bit weapon sounds
         function create8BitSound(type) {
@@ -1082,6 +1088,20 @@
                 sound.play().catch(err => console.log('Punch sound play failed:', err));
             } catch (e) {
                 console.log('Punch sound play failed:', e);
+            }
+        }
+
+        // Play metal hit sound (for helicopter hits)
+        function playMetalSound() {
+            if (game.volume === 0) return; // Don't play if muted
+
+            try {
+                // Clone the audio to allow overlapping sounds
+                const sound = metalSound.cloneNode();
+                sound.volume = game.volume * 0.3;
+                sound.play().catch(err => console.log('Metal sound play failed:', err));
+            } catch (e) {
+                console.log('Metal sound play failed:', e);
             }
         }
 
@@ -3706,6 +3726,12 @@
                         bullets[j].y + bullets[j].height > enemies[i].y) {
 
                         enemies[i].health -= bullets[j].damage;
+
+                        // Play metal sound when hitting helicopter
+                        if (enemies[i].type === 'helicopter' || enemies[i].type === 'red_helicopter') {
+                            playMetalSound();
+                        }
+
                         returnToPool('bullets', bullets[j]);
                         bullets.splice(j, 1);
 
@@ -4517,11 +4543,11 @@
                         drawItemTooltip(game.hoveredItem, game.hoveredItem.x, game.hoveredItem.y);
                     }
 
-                    // Draw exit button in top right corner
-                    const exitButtonX = canvas.width - 120;
+                    // Draw exit button in top right corner (20% larger)
+                    const exitButtonX = canvas.width - 140;
                     const exitButtonY = 15;
-                    const exitButtonWidth = 100;
-                    const exitButtonHeight = 40;
+                    const exitButtonWidth = 120;
+                    const exitButtonHeight = 48;
 
                     // Check if mouse is hovering over exit button
                     const isExitHovered = game.mouseX >= exitButtonX && game.mouseX <= exitButtonX + exitButtonWidth &&
@@ -4538,9 +4564,9 @@
 
                     // Draw exit button text
                     ctx.fillStyle = '#FFF';
-                    ctx.font = 'bold 18px Courier New';
+                    ctx.font = 'bold 22px Courier New';
                     ctx.textAlign = 'center';
-                    ctx.fillText('EXIT', exitButtonX + exitButtonWidth / 2, exitButtonY + 26);
+                    ctx.fillText('EXIT', exitButtonX + exitButtonWidth / 2, exitButtonY + 31);
 
                     // Draw instructions
                     ctx.fillStyle = '#FFD700';
@@ -4931,11 +4957,11 @@
                 const mouseX = e.clientX - rect.left;
                 const mouseY = e.clientY - rect.top;
 
-                // Check if clicked on exit button
-                const exitButtonX = canvas.width - 120;
+                // Check if clicked on exit button (20% larger)
+                const exitButtonX = canvas.width - 140;
                 const exitButtonY = 15;
-                const exitButtonWidth = 100;
-                const exitButtonHeight = 40;
+                const exitButtonWidth = 120;
+                const exitButtonHeight = 48;
 
                 if (mouseX >= exitButtonX && mouseX <= exitButtonX + exitButtonWidth &&
                     mouseY >= exitButtonY && mouseY <= exitButtonY + exitButtonHeight) {
@@ -5083,12 +5109,14 @@
                     </div>
                 `;
 
-                // Add event listener for the "Got it!" button - close dialog and open shop
+                // Add event listener for the "Got it!" button - return to original dialog
                 document.getElementById('okRestock').addEventListener('click', () => {
                     playButtonSound('click');
-                    document.getElementById('merchantDialog').style.display = 'none';
-                    // Open shop properly so player can buy items
-                    actuallyOpenShop();
+                    // Restore original merchant dialog to give player options again
+                    document.getElementById('merchantDialog').innerHTML = originalMerchantDialogHTML;
+                    // Reattach event listeners after restoring HTML
+                    attachMerchantDialogListeners();
+                    // Dialog stays visible with original 3 options
                 });
             }
             });
